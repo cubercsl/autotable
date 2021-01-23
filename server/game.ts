@@ -31,7 +31,8 @@ export class Game {
 
   constructor(public readonly gameId: string) {
     this.password = randomString();
-    console.log(`new game: ${this.gameId}`);
+    console.log(`[${gameId}] new game`);
+    this.gameId = gameId;
     this.expiryTime = new Date().getTime() + EXPIRY_TIME;
   }
 
@@ -49,7 +50,7 @@ export class Game {
     client.game = this;
     client.isAuthed = this.starting;
 
-    console.log(`${this.gameId}: join: ${playerId}`);
+    console.log(`[${this.gameId}.${playerId}] join`);
 
     this.send(client, {
       type: 'JOINED',
@@ -197,7 +198,7 @@ export class Game {
   }
 
   leave(client: Client): void {
-    console.log(`${this.gameId}: leave: ${client.playerId}`);
+    console.log(`[${this.gameId}.${client.playerId}] leave`);
 
     this.clients.delete(client.playerId!);
     const toUpdate: Array<Entry> = [];
@@ -221,7 +222,7 @@ export class Game {
 
   private send(client: Client, message: Message): void {
     const data = JSON.stringify(message);
-    console.debug(`send ${this.gameId}.${client.playerId} ${data}`);
+    console.debug(`[${this.gameId}.${client.playerId}] send ${data}`);
     client.send(data);
   }
 

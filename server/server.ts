@@ -40,9 +40,9 @@ export class Server {
 
       client.on('message', data => {
         if (client.game !== null) {
-          console.debug(`recv ${client.game.gameId}.${client.playerId} ${data}`);
+          console.debug(`[${client.game.gameId}.${client.playerId}] recv ${data}`);
         } else {
-          console.debug(`recv * ${data}`);
+          console.debug(`recv ${data}`);
         }
 
         const message = JSON.parse(data as string) as Message;
@@ -95,7 +95,7 @@ export class Server {
       case 'JOIN': {
         let game = this.games.get(message.gameId);
         if (!game) {
-          console.warn(`game not found, creating: ${message.gameId}`);
+          console.warn(`[${message.gameId}] game not found, creating`);
           game = new Game(message.gameId);
           this.games.set(message.gameId, game);
         }
@@ -118,7 +118,7 @@ export class Server {
     const now = new Date().getTime();
     for (const [gameId, game] of this.games.entries()) {
       if (game.expiryTime !== null && game.expiryTime < now) {
-        console.log(`deleting expired: ${gameId}`);
+        console.log(`[${gameId}] deleting expired`);
         this.games.delete(gameId);
       }
     }
