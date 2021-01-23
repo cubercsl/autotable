@@ -55,6 +55,7 @@ export class GameUi {
     toggleDealer: HTMLButtonElement;
     toggleHonba: HTMLButtonElement;
     takeSeat: Array<HTMLButtonElement>;
+    kick: Array<HTMLButtonElement>;
     leaveSeat: HTMLButtonElement;
     toggleSetup: HTMLButtonElement;
     dealType: HTMLSelectElement;
@@ -100,6 +101,7 @@ export class GameUi {
       toggleDealer: document.getElementById('toggle-dealer') as HTMLButtonElement,
       toggleHonba: document.getElementById('toggle-honba') as HTMLButtonElement,
       takeSeat: [],
+      kick: [],
       leaveSeat: document.getElementById('leave-seat') as HTMLButtonElement,
       toggleSetup: document.getElementById('toggle-setup') as HTMLButtonElement,
       dealType: document.getElementById('deal-type') as HTMLSelectElement,
@@ -128,6 +130,7 @@ export class GameUi {
       this.elements.takeSeat.push(document.querySelector(`.seat-button-${i} button`) as HTMLButtonElement);
       this.elements.viewHand.push(document.querySelector(`.player-display [data-seat="${i}"] .hand`) as HTMLDivElement);
       this.elements.viewCalls.push(document.querySelector(`.player-display [data-seat="${i}"] .calls`) as HTMLDivElement);
+      this.elements.kick.push(document.querySelector(`.seat-button-${i} .kick`) as HTMLButtonElement);
     }
 
     this.elements.nick.value = localStorage.getItem("nick") ?? "";
@@ -225,6 +228,14 @@ export class GameUi {
       this.elements.toggleSidebar.innerHTML = isVisible ? "&lsaquo;" : "&rsaquo;";
     };
 
+    for (let i = 0; i < 4; i++) {
+      this.setupProgressButton(this.elements.kick[i], 2000, () => {
+        const kickedId = this.client.seatPlayers[i];
+        if (kickedId !== null) {
+          this.client.seats.set(kickedId, { seat: null });
+        }
+      });
+    }
     this.elements.leaveSeat.onclick = () => {
       this.client.seats.set(this.client.playerId(), { seat: null });
     };
@@ -310,6 +321,9 @@ export class GameUi {
         }
       });
     }
+
+    // @ts-ignore
+    $('[data-toggle="tooltip"]').tooltip();
   }
 
   private updateSetup(): void {
@@ -396,27 +410,44 @@ export class GameUi {
     if (this.client.seat === null) {
       for (let i = 0; i < 4; i++) {
         const playerId = this.client.seatPlayers[i];
-        const button = document.querySelector(`.seat-button-${i} button`) as HTMLButtonElement;
         if (playerId !== null) {
+          this.elements.takeSeat[i].style.display = 'none';
+          this.elements.kick[i].style.display = '';
+
           const nick = this.client.nicks.get(playerId) || 'Jyanshi';
-          button.disabled = true;
-          button.className = 'btn btn-secondary';
-          button.textContent = nick;
+          const textElement = this.elements.kick[i].querySelector('.btn-progress-text')!;
+          textElement.textContent = nick;
         } else {
-          button.className = 'btn btn-primary';
-          button.disabled = false;
-          button.textContent = 'Take seat';
+          this.elements.takeSeat[i].style.display = '';
+          this.elements.kick[i].style.display = 'none';
         }
       }
     }
   }
 
   private setupDealButton(): void {
-    const buttonElement = document.getElementById('deal')!;
-    const progressElement = document.querySelector('#deal .btn-progress')! as HTMLElement;
+    const buttonElement = document.getElementById('deal')! as HTMLButtonElement;
+
+    this.setupProgressButton(buttonElement, 600, () => {
+      const dealType = this.elements.dealType.value as DealType;
+      const gameType = this.elements.gameType.value as GameType;
+      const aka = parseTileString(this.elements.akaText.value);
+      const points = this.elements.points.value as Points;
+
+      this.world.deal(dealType, gameType, aka, points);
+      this.resetDealType();
+      this.hideSetup();
+    });
+  }
+
+  private setupProgressButton(
+      buttonElement: HTMLButtonElement,
+      transitionTime: number, onSuccess: () => void): void {
+    const progressElement = buttonElement.querySelector('.btn-progress')! as HTMLElement;
+
+    progressElement.style.transitionDuration = `${transitionTime}ms`;
 
     let startPressed: number | null = null;
-    const transitionTime = 600;
     const waitTime = transitionTime + 0;
 
     const start = (): void => {
@@ -425,26 +456,21 @@ export class GameUi {
         startPressed = new Date().getTime();
       }
     };
+
     const cancel = (): void => {
       progressElement.style.width = '0%';
       startPressed = null;
       buttonElement.blur();
     };
+
     const commit = (): void => {
-      const deal = startPressed !== null && new Date().getTime() - startPressed > waitTime;
+      const success = startPressed !== null && new Date().getTime() - startPressed > waitTime;
       progressElement.style.width = '0%';
       startPressed = null;
       buttonElement.blur();
 
-      if (deal) {
-        const dealType = this.elements.dealType.value as DealType;
-        const gameType = this.elements.gameType.value as GameType;
-        const aka = parseTileString(this.elements.akaText.value);
-        const points = this.elements.points.value as Points;
-
-        this.world.deal(dealType, gameType, aka, points);
-        this.resetDealType();
-        this.hideSetup();
+      if (success) {
+        onSuccess();
       }
     };
 
