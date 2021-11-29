@@ -1,5 +1,6 @@
 import { Slot } from "./slot";
 import { Thing } from "./thing";
+import { rotEquals, rotZ } from "./utils";
 import { Euler } from "three";
 
 type SlotOp = (slot: Slot) => Slot | null;
@@ -76,22 +77,27 @@ export class Movement {
       thing.prepareMove();
     }
     for (const [thing, slot] of this.thingMap.entries()) {
+      // TODO instead of group, check if rotations are the same?
       let rotationIndex = 0;
-      if (this.heldRotation !== null && this.heldRotation !== undefined) {
-        const matchingIndex = slot.rotationOptions.findIndex(o => o.equals(this.heldRotation!));
-        if (matchingIndex >= 0) {
-          rotationIndex = matchingIndex;
-        }
-      } else {
-        if (slot.group === 'meld' && thing.slot.group == 'discard') {
-            rotationIndex = 1;
-        } else {
-            rotationIndex = thing.slot.group === slot.group
-             ? thing.rotationIndex
-             : Math.max(0, slot.rotationOptions.findIndex(r => r.equals(thing.slot.rotationOptions[thing.rotationIndex])));
+      if (thing.slot.group === slot.group) {
+        rotationIndex = thing.rotationIndex;
+      } else if (!slot.rotateHeld) {
+        const allHeldRotations = [
+          thing.heldRotation,
+          rotZ(thing.heldRotation, 1),
+          rotZ(thing.heldRotation, 2),
+          rotZ(thing.heldRotation, 3),
+        ];
+      find:
+        for (let i = 0; i < slot.rotations.length; i++) {
+          for (const held of allHeldRotations) {
+            if (rotEquals(slot.rotations[i], held)) {
+              rotationIndex = i;
+              break find;
+            }
+          }
         }
       }
-
       thing.moveTo(slot, rotationIndex);
       thing.release();
     }
