@@ -1,4 +1,4 @@
-import { Vector3, Quaternion } from "three";
+import { Vector3 } from "three";
 
 import { Movement } from "./movement";
 import { Client } from "./client";
@@ -10,7 +10,6 @@ import { SoundPlayer } from "./sound-player";
 import { Conditions, ThingInfo, SoundType, Place, ThingType, Size, DealType, GameType, Points } from "./types";
 import { Slot } from "./slot";
 import { Thing } from "./thing";
-import { Rotation } from "./setup-slots";
 
 
 interface Select extends Place {
@@ -20,8 +19,6 @@ interface Select extends Place {
 const SHIFT_TIME = 100;
 
 export class World {
-  private static readonly heldRotationOptions = [Rotation.STANDING, Rotation.FACE_DOWN];
-
   setup: Setup;
 
   private objectView: ObjectView;
@@ -36,7 +33,6 @@ export class World {
 
   private movement: Movement | null = null;
   private heldMouse: Vector3 | null = null;
-  private heldRotationIndex: number = -1;
   mouseTracker: MouseTracker;
 
   soundPlayer: SoundPlayer;
@@ -64,8 +60,10 @@ export class World {
     this.mouseTracker = new MouseTracker(this.client);
 
     this.soundPlayer = soundPlayer;
+
     this.sendUpdate();
   }
+
 
   registerEvents(): void {
     this.client.seats.on('update', this.onSeat.bind(this));
@@ -111,19 +109,12 @@ export class World {
       thing.moveTo(slot, thingInfo.rotationIndex);
       thing.sent = true;
 
-      if (thing.claimedBy !== thingInfo.claimedBy) {
-        if (thing.claimedBy !== null) {
-          thing.release();
-        } else {
-          thing.claimedBy = thingInfo.claimedBy;
-        }
-      }
-
-
+      thing.claimedBy = thingInfo.claimedBy;
       thing.heldRotation.set(
         thingInfo.heldRotation.x,
         thingInfo.heldRotation.y,
         thingInfo.heldRotation.z,
+        thingInfo.heldRotation.w,
       );
 
       const shiftSlot = thingInfo.shiftSlotName ? this.slots.get(thingInfo.shiftSlotName)! : null;
@@ -203,6 +194,7 @@ export class World {
           x: thing.heldRotation.x,
           y: thing.heldRotation.y,
           z: thing.heldRotation.z,
+          w: thing.heldRotation.w,
       },
       shiftSlotName: thing.shiftSlot?.name ?? null,
     };
@@ -278,23 +270,6 @@ export class World {
     this.selected = filterMostCommon(this.selected, thing => thing.slot.group + '@' + thing.slot.seat);
   }
 
-  private getHeld(): Array<Thing> {
-    const held: Array<Thing> = [];
-    for (const thing of this.things.values()) {
-      if (thing.claimedBy !== this.seat) {
-        continue;
-      }
-
-      if (thing.shiftSlot !== null) {
-        thing.release();
-      } else {
-        held.push(thing);
-      }
-    }
-
-    return held;
-  }
-
   onMove(mouse: Vector3 | null): void {
     if ((this.mouse === null && mouse === null) ||
         (this.mouse !== null && mouse !== null && this.mouse.equals(mouse))) {
@@ -315,11 +290,18 @@ export class World {
 
     this.movement = new Movement();
 
-    const held = this.getHeld();
-    if (held.length === 0) {
-      return;
-    }
+    const held: Array<Thing> = [];
 
+    for (const thing of this.things.values()) {
+      if (thing.claimedBy === this.seat) {
+        if (thing.shiftSlot !== null) {
+          thing.release();
+        } else {
+          held.push(thing);
+        }
+      }
+    }
+    // this.things.filter(thing => thing.claimedBy === this.seat);
     held.sort((a, b) => compareZYX(a.slot.origin, b.slot.origin));
 
     for (let i = 0; i < held.length; i++) {
@@ -346,14 +328,7 @@ export class World {
       this.movement = null;
       return;
     }
-
-    if(this.heldRotationIndex === -1) {
-      const rotation = this.movement.rotateHeld();
-      if (rotation !== null) {
-        this.heldRotationIndex = Math.max(0, World.heldRotationOptions.findIndex(o => o.equals(rotation)));
-      }
-    }
-
+    this.movement.rotateHeld();
     this.movement.applyShift(this.seat!);
   }
 
@@ -394,6 +369,7 @@ export class World {
       if (slot.links.requires && slot.links.requires.thing === null) {
         continue;
       }
+
       const place = slot.placeWithOffset(0);
 
       const margin = Size.TILE.x / 2;
@@ -419,74 +395,59 @@ export class World {
       return false;
     }
 
-    if (this.hovered === null || this.isHolding()) {
-      return false;
+    if (this.hovered !== null && !this.isHolding()) {
+      let toHold;
+      if (this.selected.indexOf(this.hovered) !== -1) {
+        toHold = [...this.selected];
+      } else {
+        toHold = [this.hovered];
+        this.selected.splice(0);
+      }
+
+      toHold = toHold.filter(thing => thing.claimedBy === null);
+
+      for (const thing of toHold) {
+        thing.hold(this.seat);
+      }
+      this.hovered = null;
+      this.heldMouse = this.mouse;
+
+      this.drag();
+      this.sendMouse();
+      this.sendUpdate();
+
+      return true;
     }
-
-    let toHold;
-    if (this.selected.indexOf(this.hovered) !== -1) {
-      toHold = [...this.selected];
-    } else {
-      toHold = [this.hovered];
-      this.selected.splice(0);
-    }
-
-    toHold = toHold.filter(thing => thing.claimedBy === null);
-
-    for (const thing of toHold) {
-      thing.hold(this.seat);
-    }
-
-    this.hovered = null;
-    this.heldMouse = this.mouse;
-
-    this.drag();
-    this.sendMouse();
-    this.sendUpdate();
-
-    return true;
+    return false;
   }
 
   onDragEnd(): void {
-    if (!this.isHolding()) {
-      return;
+    if (this.isHolding()) {
+      if (this.heldMouse !== null && this.mouse !== null &&
+          this.heldMouse.equals(this.mouse)) {
+
+        // No movement; unselect
+        this.selected.splice(0);
+        this.dropInPlace();
+        // if (this.hovered !== null) {
+        //   this.selected.push(this.hovered);
+        // }
+      } else if (this.canDrop()) {
+        // Successful movement
+        this.drop();
+      } else {
+        this.dropInPlace();
+      }
     }
 
-    if (this.heldMouse !== null && this.mouse !== null &&
-        this.heldMouse.equals(this.mouse)) {
-
-      // No movement; unselect
-      this.selected.splice(0);
-      this.dropInPlace();
-      // if (this.hovered !== null) {
-      //   this.selected.push(this.hovered);
-      // }
-    } else if (this.canDrop()) {
-      // Successful movement
-      this.drop();
-    } else {
-      this.dropInPlace();
-    }
-
-    this.heldRotationIndex = -1;
   }
 
   onFlip(direction: number, animated?: boolean): void {
     if (this.isHolding()) {
-      this.heldRotationIndex = Math.max(
-        0,
-        (this.heldRotationIndex + (direction % World.heldRotationOptions.length) + World.heldRotationOptions.length) % World.heldRotationOptions.length
-      );
+      return;
+    }
 
-      if (this.seat !== null) {
-        const q = new Quaternion().setFromEuler(World.heldRotationOptions[this.heldRotationIndex]);
-        q.premultiply(new Quaternion().setFromAxisAngle(new Vector3(0, 0, 1), this.seat * Math.PI / 2));
-        for (const thing of this.getHeld()) {
-            thing.heldRotation.setFromQuaternion(q);
-            thing.sent = false;
-        }
-      }
-    } else if (this.selected.length > 0) {
+    if (this.selected.length > 0) {
       const rotationIndex = mostCommon(this.selected, thing => thing.rotationIndex)!;
       const toFlip = [];
       for (const thing of this.selected) {
@@ -510,6 +471,7 @@ export class World {
       this.checkPushes();
     }
     this.sendUpdate();
+
   }
 
   private flipAnimated(things: Array<Thing>, i: number, rotationIndex: number): void {
@@ -545,7 +507,6 @@ export class World {
       }
     }
 
-    this.movement.setHeldRotation(World.heldRotationOptions[this.heldRotationIndex]);
     this.movement.apply();
     this.checkPushes();
     this.finishDrop();
@@ -681,7 +642,7 @@ export class World {
             if (thing.slot.links.up?.thing != null) {
               continue;
             }
-            place = thing.slot.getTop().placeWithOffset(thing.rotationIndex);
+            place = thing.slot.getTop().placeWithOffset(thing.rotationIndex)
           }
           result.push({...place, id: thing.index});
         }

@@ -1,4 +1,4 @@
-import { Vector3, Euler } from "three";
+import { Vector3, Quaternion } from "three";
 import { tileMapToString, parseTileString } from "./game-ui";
 
 export enum ThingType {
@@ -15,7 +15,7 @@ export const Size = {
 
 export interface Place {
   position: Vector3;
-  rotation: Euler;
+  rotation: Quaternion;
   size: Vector3;
 }
 
@@ -23,7 +23,7 @@ export interface ThingInfo {
   slotName: string;
   rotationIndex: number;
   claimedBy: number | null;
-  heldRotation: { x: number; y: number; z: number };
+  heldRotation: { x: number; y: number; z: number, w: number };
   shiftSlotName: string | null;
 }
 

@@ -1,7 +1,6 @@
 import { Slot } from "./slot";
 import { Thing } from "./thing";
-import { rotEquals, rotZ } from "./utils";
-import { Euler } from "three";
+import { rotEquals, SEAT_ROTATIONS } from "./utils";
 
 type SlotOp = (slot: Slot) => Slot | null;
 
@@ -13,7 +12,6 @@ export class Movement {
   private thingMap: Map<Thing, Slot> = new Map();
   private reverseMap: Map<Slot, Thing> = new Map();
   private shiftMap: Map<Thing, Slot> = new Map();
-  private heldRotation: Euler | null = null;
 
   move(thing: Thing, slot: Slot): void {
     if (this.reverseMap.has(slot)) {
@@ -84,9 +82,9 @@ export class Movement {
       } else if (!slot.rotateHeld) {
         const allHeldRotations = [
           thing.heldRotation,
-          rotZ(thing.heldRotation, 1),
-          rotZ(thing.heldRotation, 2),
-          rotZ(thing.heldRotation, 3),
+          thing.heldRotation.clone().premultiply(SEAT_ROTATIONS[1]),
+          thing.heldRotation.clone().premultiply(SEAT_ROTATIONS[2]),
+          thing.heldRotation.clone().premultiply(SEAT_ROTATIONS[3]),
         ];
       find:
         for (let i = 0; i < slot.rotations.length; i++) {
@@ -108,34 +106,23 @@ export class Movement {
     }
   }
 
-  setHeldRotation(heldRotation: Euler): void {
-    this.heldRotation = heldRotation;
-  }
-
-  rotateHeld(): Euler | null {
+  rotateHeld(): void {
     // Don't rotate more than 1 tile, they may collide
     if (this.thingMap.size > 1) {
-      return null;
+      return;
     }
 
     for (const [thing, slot] of this.thingMap.entries()) {
-      if (!slot.rotateHeld) {
-        return null;
+      if (slot.rotateHeld) {
+        const rotationIndex =
+          thing.slot.group === slot.group ? thing.rotationIndex : 0;
+        const rotation = slot.rotations[rotationIndex];
+        if (!thing.heldRotation.equals(rotation)) {
+          thing.heldRotation.copy(rotation);
+          thing.sent = false;
+        }
       }
-
-
-      const rotationIndex = thing.slot.group === slot.group ? thing.rotationIndex : 0;
-      const rotation = slot.rotations[rotationIndex];
-      if (thing.heldRotation.equals(rotation)) {
-        return null;
-      }
-
-      thing.heldRotation.copy(rotation);
-      thing.sent = false;
-      return slot.rotationOptions[rotationIndex];
     }
-
-    return null;
   }
 
   findShift(allThings: Array<Thing>, ops: Array<SlotOp>): boolean {

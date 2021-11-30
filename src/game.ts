@@ -48,7 +48,6 @@ export class Game {
     this.mouseUi = new MouseUi(this.world, this.mainGroup);
     this.clientUi = new ClientUi(this.client);
     this.gameUi = new GameUi(this.client, this.world, this.mainView, this.assetLoader, this.objectView);
-    this.world.registerEvents();
 
     this.settings = {
       perspective: document.getElementById('perspective') as HTMLInputElement,
@@ -58,6 +57,7 @@ export class Game {
     };
 
     this.setupEvents();
+    this.world.registerEvents();
   }
 
   private setupEvents(): void {
