@@ -5,3 +5,5 @@ build/
 *.auto.*
 *.blend1
 .vscode/
+.venv/
+.parcel-cache/

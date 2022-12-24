@@ -1,4 +1,4 @@
-FROM node:12.18 AS base
+FROM node:19.3 AS base
 
 FROM base AS build
 WORKDIR /build/
