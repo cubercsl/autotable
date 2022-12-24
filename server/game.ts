@@ -186,7 +186,7 @@ export class Game {
         const value = item[field];
         if (value !== null && value !== undefined) {
           if (occupied.has(value)) {
-            console.log(`conflict on ${kind}, ${field} = ${value}`);
+            console.log(`[${this.gameId}] conflict on ${kind}, ${field} = ${value}`);
             return false;
           }
           occupied.add(value);

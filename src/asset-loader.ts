@@ -1,9 +1,9 @@
 // @ts-ignore
-import jpg from '../img/*.jpg';
+import tableJpg from 'url:../img/table.jpg';
 // @ts-ignore
-import png from '../img/*.png';
+import washizuPng from 'url:../img/tiles.washizu.auto.png';
 // @ts-ignore
-import glbModels from '../img/models.auto.glb';
+import glbModels from 'url:../img/models.auto.glb';
 
 import { Texture, Mesh, TextureLoader, Material, LinearEncoding,
    MeshStandardMaterial, MeshLambertMaterial, PlaneGeometry, RepeatWrapping } from 'three';
@@ -74,8 +74,8 @@ export class AssetLoader {
 
   loadAll(): Promise<void> {
     const tasks = [
-      this.loadTexture(jpg['table'], 'table'),
-      this.loadTexture(png['tiles.washizu.auto'], 'tiles.washizu.auto'),
+      this.loadTexture(tableJpg, 'table'),
+      this.loadTexture(washizuPng, 'tiles.washizu.auto'),
       this.loadModels(glbModels),
       (document as any).fonts.load('40px "Segment7Standard"'),
     ];

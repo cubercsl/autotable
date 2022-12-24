@@ -26,8 +26,9 @@ describe('Game', function() {
     game.join(client);
     expect(client.game).toBe(game);
     expect(client.playerId).not.toBe(null);
+    const password = client.sent[0].type == 'JOINED' ? client.sent[0].password : undefined;
     expect(client.sent).toEqual([
-      { type: 'JOINED', gameId: 'xxx', playerId: client.playerId, isFirst: true },
+      { type: 'JOINED', gameId: 'xxx', playerId: client.playerId, isFirst: true, password: password },
       { type: 'UPDATE', entries: [], full: true},
     ]);
   });
@@ -53,8 +54,9 @@ describe('Game', function() {
     game.join(client2);
     expect(client2.game).toBe(game);
     expect(client2.playerId).not.toBe(null);
+    const password = client2.sent[0].type == 'JOINED' ? client2.sent[0].password : undefined;
     expect(client2.sent).toEqual([
-      { type: 'JOINED', gameId: 'xxx', playerId: client2.playerId, isFirst: false },
+      { type: 'JOINED', gameId: 'xxx', playerId: client2.playerId, isFirst: false, password: password },
       { type: 'UPDATE', entries: [['foo', 'bar2', 'baz2']], full: true},
     ]);
   });
