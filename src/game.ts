@@ -169,6 +169,9 @@ export class Game {
       case 'z':
         this.zoom.start(0);
         break;
+      case 'x':
+        this.zoom.start(0);
+        break;
     }
   }
 }
