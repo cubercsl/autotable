@@ -1,8 +1,6 @@
-//import 'normalize.css';
-import 'bootstrap/dist/js/bootstrap';
+import './i18n';
 import { AssetLoader } from './asset-loader';
 import { Game } from './game';
-
 const assetLoader = new AssetLoader();
 
 

@@ -1,0 +1,62 @@
+{
+    "take-seat": "Take seat",
+    "click-and-hold-to-unseat": "Click and hold to unseat",
+    "deal-btn": "Deal",
+    "setup": "Setup",
+    "deal": {
+        "type": "Deal type:",
+        "unshuffled": "Only walls (not shuffled)",
+        "hands": "Hands",
+        "initial": "Only walls",
+        "winds": "Wind tiles (for seats)"
+    },
+    
+    "game": {
+        "type": "Game type:",
+        "four-player": "4-player",
+        "three-player": "3-player",
+        "minefield": "2-player Minefield",
+        "bamboo": "2-player Bamboo",
+        "washizu": "Washizu",
+        "demo": "Demo"
+    },
+    "aka": {
+        "dora": "Aka dora:",
+        "no-aka": "No aka",
+        "5m5p5s": "3 Red Fives",
+        "5m55p5s": "4 Red Fives",
+        "5z": "Red Dot",
+        "5m5p5s5z": "Red Dot, 3 Red Fives",
+        "5m55p5s5z": "Red Dot, 4 Red Fives",
+        "custom": "Custom"
+    },
+    "starting-point": "Starting points:",
+    "dealer": "Dealer",
+    "honba": "Honba",
+    "connect": "Connect",
+    "disonnect": "Disconnect",
+    "nick": "Nick",
+    "leave-seat": "Leave seat",
+    "add-spectator-password": "Add Spectator Password",
+    "remove-spectator-password": "Remove Spectator Password",
+    "spectator-password": "Spectator Password",
+    "spectate": "Spectate",
+    "stop-spectate": "Stop Spectating",
+    "spectators": "Spectators",
+    "upload-table-cloth": "Upload Table Cloth",
+    "reset-table-cloth": "Reset Table Cloth",
+    "more": "More",
+    "instructions": {
+        "title": "Instructions",
+        "text": "<b>Drag mouse</b> to move or select<br>Press <b>F</b> or <b>right-click</b> to flip or rotate<br>Press <b>R</b> to rotate backwards; for example hide your hand<br>Hold <b>SPACE</b> (or press <b>Q</b>) to look down<br>Hold <b>Z</b> to zoom in<br>Hold <b>X</b> to zoom out<br>Press <b>P</b> to toggle perspective mode"
+    },
+    "settings": "Settings",
+    "perspective-mode": "Perspective mode",
+    "benchmark-mode": "Benchmark mode (don't limit FPS)",
+    "mute-sound": "Mute sound",
+    "sticky-mouse": "Sticky mouse (click to grab)",
+    "new-game": "New game",
+    "about": "About the project",
+    "failed-to-connect": "Failed to connect.",
+    "trying-to-reconnect": "Trying to reconnect..."
+}

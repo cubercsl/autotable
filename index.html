@@ -22,7 +22,7 @@
     <div id="full">
         <div id="main">
             <div class="spinner-border text-light" id="loading" role="status">
-                <span class="sr-only">Loading...</span>
+                <span class="sr-only"></span>
             </div>
             <div id="spectator-ui" style="display:none">
                 <div class="header">
@@ -131,36 +131,40 @@
         </div>
         <div class="seat-buttons">
             <div class="seat-button seat-button-0">
-                <button class="take-seat btn btn-primary" style="display: none;">Take seat</button>
+                <button class="take-seat btn btn-primary" style="display: none;" data-i18n="take-seat">Take seat</button>
                 <button class="kick btn btn-dark" style="display: none"
-                        data-toggle="tooltip" data-placement="top"
+                        data-bs-toggle="tooltip" data-bs-placement="top"
+                        data-i18n="click-and-hold-to-unseat", data-i18n-attr="title"
                         title="Click and hold to unseat">
                     <div class="btn-progress"></div>
                     <span class="btn-progress-text"></span>
                 </button>
             </div>
             <div class="seat-button seat-button-1">
-                <button class="take-seat btn btn-primary" style="display: none;">Take seat</button>
+                <button class="take-seat btn btn-primary" style="display: none;" data-i18n="take-seat">Take seat</button>
                 <button class="kick btn btn-dark" style="display: none"
-                        data-toggle="tooltip" data-placement="top"
+                        data-bs-toggle="tooltip" data-bs-placement="top"
+                        data-i18n="click-and-hold-to-unseat", data-i18n-attr="title"
                         title="Click and hold to unseat">
                     <div class="btn-progress"></div>
                     <span class="btn-progress-text"></span>
                 </button>
             </div>
             <div class="seat-button seat-button-2">
-                <button class="take-seat btn btn-primary" style="display: none;">Take seat</button>
+                <button class="take-seat btn btn-primary" style="display: none;" data-i18n="take-seat">Take seat</button>
                 <button class="kick btn btn-dark" style="display: none"
-                        data-toggle="tooltip" data-placement="top"
+                        data-bs-toggle="tooltip" data-bs-placement="top"
+                        data-i18n="click-and-hold-to-unseat", data-i18n-attr="title"
                         title="Click and hold to unseat">
                     <div class="btn-progress"></div>
                     <span class="btn-progress-text"></span>
                 </button>
             </div>
             <div class="seat-button seat-button-3">
-                <button class="take-seat btn btn-primary" style="display: none;">Take seat</button>
+                <button class="take-seat btn btn-primary" style="display: none;" data-i18n="take-seat">Take seat</button>
                 <button class="kick btn btn-dark" style="display: none"
-                        data-toggle="tooltip" data-placement="top"
+                        data-bs-toggle="tooltip" data-bs-placement="top"
+                        data-i18n="click-and-hold-to-unseat", data-i18n-attr="title"
                         title="Click and hold to unseat">
                     <div class="btn-progress"></div>
                     <span class="btn-progress-text"></span>
@@ -169,49 +173,50 @@
         </div>
 
         <div class="d-flex align-items-center" id="sidebar">
-            <div class="collapsed container text-light py-3 pr-0" id="sidebar-body" style="display: none;">
+            <div class="collapsed container text-light py-3 pr-0" id="sidebar-body" style="display: none">
                 <div class="d-flex">
                     <button class="btn btn-warning btn-sm w-100" id="deal">
                         <div class="btn-progress"></div>
-                        <span class="btn-progress-text">Deal</span>
+                        <span class="btn-progress-text" data-i18n="deal-btn">Deal</span>
                     </button>
                 </div>
 
-                <button disabled class="btn btn-sm btn-outline-secondary text-white w-100 mr-2 mt-2 text-break" id="setup-desc">
+                <button disabled class="btn btn-sm btn-outline-secondary text-white w-100 me-2 mt-2 text-break" id="setup-desc">
+                    &nbsp;
                 </button>
-                <button class="btn btn-dark btn-sm dropdown-toggle mt-2 w-100" id="toggle-setup"
-                    data-toggle="collapse" data-target="#setup-group">Setup</button>
+                <button class="btn btn-dark btn-sm dropdown-toggle mt-2 w-100" id="toggle-setup" data-i18n="setup"
+                    data-bs-toggle="collapse" data-bs-target="#setup-group">Setup</button>
 
-                <div id="setup-group" class="collapse" data-toggle="true">
+                <div id="setup-group" class="collapse" data-bs-toggle="true">
                     <select class="dark-select form-control form-control-sm mt-2" id="deal-type">
-                        <option disabled value="">Deal:</option>
-                        <option value="UNSHUFFLED">Only walls (not shuffled)</option>
-                        <option value="HANDS" selected>Hands</option>
-                        <option value="INITIAL">Only walls</option>
-                        <option value="WINDS">Wind tiles (for seats)</option>
+                        <option disabled data-i18n="deal.type">Deal type:</option>
+                        <option value="UNSHUFFLED" data-i18n="deal.unshuffled">Only walls (not shuffled)</option>
+                        <option value="HANDS" selected data-i18n="deal.hands">Hands</option>
+                        <option value="INITIAL" data-i18n="deal.initial">Only walls</option>
+                        <option value="WINDS" data-i18n="deal.winds">Wind tiles (for seats)</option>
                     </select>
                     <select class="dark-select form-control form-control-sm mt-2" id="game-type">
-                        <option disabled value="">Game type:</option>
-                        <option value="FOUR_PLAYER" selected>4-player</option>
-                        <option value="THREE_PLAYER">3-player</option>
-                        <option value="MINEFIELD">2-player Minefield</option>
-                        <option value="BAMBOO">2-player Bamboo</option>
-                        <option value="WASHIZU">Washizu</option>
-                        <option value="FOUR_PLAYER_DEMO">Demo</option>
+                        <option disabled data-i18n="game.type">Game type:</option>
+                        <option value="FOUR_PLAYER" selected data-i18n="game.four-player">4-player</option>
+                        <option value="THREE_PLAYER" data-i18n="game.three-player">3-player</option>
+                        <option value="MINEFIELD" data-i18n="game.minefield">2-player Minefield</option>
+                        <option value="BAMBOO" data-i18n="game.bamboo">2-player Bamboo</option>
+                        <option value="WASHIZU" data-i18n="game.washizu">Washizu</option>
+                        <option value="FOUR_PLAYER_DEMO" data-i18n="game.demo">Demo</option>
                     </select>
                     <select class="dark-select form-control form-control-sm mt-2" id="aka">
-                        <option disabled value="">Aka dora:</option>
-                        <option value="">No aka</option>
-                        <option value="5m5p5s" selected>3 Red Fives</option>
-                        <option value="5m55p5s">4 Red Fives</option>
-                        <option value="5z">Red Dot</option>
-                        <option value="5m5p5s5z">Red Dot, 3 Red Fives</option>
-                        <option value="5m55p5s5z">Red Dot, 4 Red Fives</option>
-                        <option value="-">Custom</option>
+                        <option disabled data-i18n="aka.dora">Aka dora:</option>
+                        <option value="" data-i18n="aka.no-aka">No aka</option>
+                        <option value="5m5p5s" selected data-i18n="aka.5m5p5s">3 Red Fives</option>
+                        <option value="5m55p5s" data-i18n="aka.5m55p5s">4 Red Fives</option>
+                        <option value="5z" data-i18n="aka.5z">Red Dot</option>
+                        <option value="5m5p5s5z" data-i18n="aka.5m5p5s5z">Red Dot, 3 Red Fives</option>
+                        <option value="5m55p5s5z" data-i18n="aka.5m55p5s5z">Red Dot, 4 Red Fives</option>
+                        <option value="-" data-i18n="aka.custom">Custom</option>
                     </select>
                     <input class="form-control form-control-sm mt-2" id="aka-text" type="text"></input>
                     <select class="dark-select form-control form-control-sm mt-2" id="points">
-                        <option disabled value="">Starting points:</option>
+                        <option disabled value="" data-i18n="starting-point">Starting points:</option>
                         <option value="5">5k</option>
                         <option value="8">8k</option>
                         <option value="25" selected>25k</option>
@@ -224,19 +229,19 @@
                 </div>
 
                 <div class="mt-2 d-flex">
-                    <button class="btn btn-secondary btn-sm mr-2 w-100" id="toggle-dealer">Dealer</button>
-                    <button class="btn btn-secondary btn-sm w-100" id="toggle-honba">Honba</button>
+                    <button class="btn btn-secondary btn-sm me-2 w-100" id="toggle-dealer" data-i18n="dealer">Dealer</button>
+                    <button class="btn btn-secondary btn-sm w-100" id="toggle-honba" data-i18n="honba">Honba</button>
                 </div>
 
                 <div class="mt-4 d-flex" id="server">
-                    <button class="btn btn-warning btn-sm w-100 server-disconnected mr-2" id="connect">
+                    <button class="btn btn-warning btn-sm w-100 server-disconnected me-2" id="connect" data-i18n="connect">
                         Connect
                     </button>
-                    <button class="btn btn-secondary btn-sm w-100 server-connected mr-2" id="disconnect">
+                    <button class="btn btn-secondary btn-sm w-100 server-connected me-2" id="disconnect" data-i18n="disonnect">
                         Disconnect
                     </button>
                     <div class="dropdown">
-                        <button class="btn btn-secondary btn-sm btn-block dropdown-toggle" data-toggle="dropdown">
+                        <button class="btn btn-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown" data-i18n="nick">
                             Nick
                         </button>
                         <div class="dropdown-menu p-3 text-light">
@@ -246,47 +251,48 @@
                 </div>
 
                 <div class="d-flex mt-2">
-                    <button class="btn btn-dark btn-sm w-100" id="leave-seat">Leave seat</button>
+                    <button class="btn btn-dark btn-sm w-100" id="leave-seat" data-i18n="leave-seat">Leave seat</button>
                 </div>
 
                 <div class="d-flex mt-2">
-                    <button class="btn btn-dark btn-sm w-100" id="toggle-spectator-password">Add Spectator Password</button>
+                    <button class="btn btn-dark btn-sm w-100" id="toggle-spectator-password" data-i18n="add-spectator-password">Add Spectator Password</button>
                 </div>
 
-                <div class="mt-2 text-light">
-                    <input class="form-control form-control-sm" id="spectator-password" type="text"></input>
-                </div>
-
-                <div class="d-flex mt-2">
-                    <button class="btn btn-dark btn-sm w-100" id="spectate">Spectate</button>
+                <div class="d-flex mt-2 text-light">
+                    <input class="form-control form-control-sm has-validation" id="spectator-password" type="text"
+                        placeholder="Spectator Password" data-i18n="spectator-password" data-i18n-attr="placeholder"></input>
                 </div>
 
                 <div class="d-flex mt-2">
-                    <button class="btn btn-dark btn-sm w-100" id="stop-spectate">Stop Spectating</button>
+                    <button class="btn btn-dark btn-sm w-100" id="spectate" data-i18n="spectate">Spectate</button>
                 </div>
 
-                <div class="mt-2" id="spectators">
-                    <u class="w-100 text-center d-block">
+                <div class="d-flex mt-2">
+                    <button class="btn btn-dark btn-sm w-100" id="stop-spectate" data-i18n="stop-spectate">Stop Spectating</button>
+                </div>
+
+                <div class="mt-2" id="spectators" style="display: none;">
+                    <u class="w-100 text-center d-block" data-i18n="spectators">
                         Spectators
                     </u>
                 </div>
 
                 <div class="d-flex mt-2">
-                    <label for="table-cloth-input" class="btn btn-dark btn-sm w-100 mb-0">Upload Table Cloth</label>
+                    <label for="table-cloth-input" class="btn btn-dark btn-sm w-100 mb-0" data-i18n="upload-table-cloth">Upload Table Cloth</label>
                     <input type="file" class="d-none form-control-file" id="table-cloth-input">
                 </div>
 
                 <div class="d-flex mt-2">
-                    <button class="btn btn-dark btn-sm w-100" id="reset-table-cloth">Reset Table Cloth</button>
+                    <button class="btn btn-dark btn-sm w-100" id="reset-table-cloth" data-i18n="reset-table-cloth">Reset Table Cloth</button>
                 </div>
 
-                <div class="dropdown mt-2 w-100">
-                    <button class="btn btn-dark btn-sm btn-block dropdown-toggle" data-toggle="dropdown">
+                <div class="dropdown mt-2 w-100 d-grid">
+                    <button class="btn btn-dark btn-sm dropdown-toggle w-100" data-bs-toggle="dropdown" data-i18n="more">
                         More
                     </button>
-                    <div class="dropdown-menu dropdown-menu-right p-3 text-light" style="width: 300px;">
-                        <h4>Instructions</h4>
-                        <p>
+                    <div class="dropdown-menu dropdown-menu-right p-3 text-light" style="width: 350px;">
+                        <h4 data-i18n="instructions.title">Instructions</h4>
+                        <p data-i18n="instructions.text">
                         <b>Drag mouse</b> to move or select<br>
                         Press <b>F</b> or <b>right-click</b> to flip or rotate<br>
                         Press <b>R</b> to rotate backwards; for example hide your hand<br>
@@ -295,30 +301,36 @@
                         Hold <b>X</b> to zoom out<br>
                         Press <b>P</b> to toggle perspective mode
                         </p>
-                        <h4>Settings</h4>
-                        <label class="dropdown-menu-item">
-                            <input type="checkbox" id="perspective">
-                            Perspective mode
-                        </label>
-                        <label>
-                            <input type="checkbox" id="benchmark">
-                            Benchmark mode (don't limit FPS)
-                        </label>
-                        <label>
-                            <input type="checkbox" id="muted">
-                            Mute sound
-                        </label>
-                        <label>
-                            <input type="checkbox" id="sticky">
-                            Sticky mouse (click to grab)
-                        </label>
-                        <button class="btn btn-secondary btn-sm btn-block mt-2" id="new-game">New game</button>
+                        <h4 data-i18n="settings">Settings</h4>
+                        <div class=" d-grid">
+                            <label class="dropdown-menu-item">
+                                <input type="checkbox" id="perspective">
+                                <span data-i18n="perspective-mode">Perspective mode</span>
+                            </label>
+                            <label>
+                                <input type="checkbox" id="benchmark">
+                                <span data-i18n="benchmark-mode">Benchmark mode (don't limit FPS)</span>
+                            </label>
+                            <label>
+                                <input type="checkbox" id="muted">
+                                <span data-i18n="mute-sound">Mute sound</span>
+                            </label>
+                            <label>
+                                <input type="checkbox" id="sticky" >
+                                <span data-i18n="sticky-mouse">Sticky mouse (click to grab)</span>
+                            </label>
+                            <button class="btn btn-secondary btn-sm mt-2" id="new-game" data-i18n="new-game">New game</button>
+                        </div>
                     </div>
+                </div>
+
+                <div class="d-flex mt-2">
+                    <select class="dark-select form-control form-control-sm mt-2" name="language" id="languageSwitcher"></select>
                 </div>
 
                 <div class="mt-2">
                     <small>
-                        <a class="text-white-50" target="_blank" href="about.html">About the project</a>
+                        <a class="text-white-50" target="_blank" href="about.html" data-i18n="about">About the project</a>
                     </small>
                 </div>
 

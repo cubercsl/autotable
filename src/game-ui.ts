@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import { Client } from "./client";
 import { World } from "./world";
 import { DealType, GameType, Conditions, Points, GAME_TYPES } from './types';
@@ -7,6 +6,9 @@ import { MainView } from './main-view';
 import { SpectatorOverlay } from './spectator-overlay';
 import { AssetLoader } from './asset-loader';
 import { ObjectView } from './object-view';
+import i18next from 'i18next';
+// @ts-ignore
+import bootstrap from 'bootstrap/dist/js/bootstrap';
 
 export function setVisibility(element: HTMLElement, isVisible: boolean): void {
   if (isVisible) {
@@ -33,6 +35,7 @@ export function parseTileString(tiles: string): Record<string, number> {
 
 export function tileMapToString(tileMap: Record<string, number>): string {
   const groups: Record<string, string> = {};
+// @ts-ignore
   for (const [key, value] of Object.entries(tileMap).sort((a, b) => a[0].codePointAt(0) - b[0].codePointAt(0))) {
     groups[key[1]] = (groups[key[1]] ?? "") + key[0].repeat(value);
   }
@@ -136,14 +139,19 @@ export class GameUi {
     this.elements.nick.value = localStorage.getItem("nick") ?? "";
     this.setupEvents();
     this.setupDealButton();
+    this.setupAka();
     this.updateSeats();
   }
 
   private trySetSpectating(isSpectating: boolean): void {
     this.client.auth(this.elements.spectatorPassword.value).then(isAuthed => {
       if (!isAuthed && this.client.spectators.options.writeProtected) {
+        this.elements.spectatorPassword.classList.remove("is-valid");
+        this.elements.spectatorPassword.classList.add("is-invalid");
         return;
       }
+      this.elements.spectatorPassword.classList.remove("is-invalid");
+      this.elements.spectatorPassword.classList.add("is-valid");
       const nick = this.elements.nick.value.length > 0 ? this.elements.nick.value : "不明";
       this.client.spectators.set(this.client.playerId(), isSpectating ? nick : null);
     });
@@ -160,7 +168,7 @@ export class GameUi {
     this.elements.toggleHonba.onclick = () => this.world.toggleHonba();
 
     this.client.spectators.on('optionsChanged', (options) => {
-      this.elements.toggleSpectatorPassword.innerText = `${options.writeProtected ? "Remove" : "Add"} Spectator Password`;
+      this.elements.toggleSpectatorPassword.innerText =  i18next.t(`${options.writeProtected ? "remove" : "add"}-spectator-password`);
     });
 
     this.client.seats.on('update', this.updateSeats.bind(this));
@@ -181,10 +189,11 @@ export class GameUi {
           element.innerText = value;
           continue;
         }
-
-        this.elements.spectators.insertAdjacentHTML("beforeend", `
-          <div class="mt-2 badge badge-success w-100 py-2" data-spectator-id="${key}">${value}</div>
-        `);
+        const spectator = document.createElement("div");
+        spectator.classList.add("mt-2", "badge", "text-bg-success", "w-100", "py-2");
+        spectator.dataset.spectatorId = key;
+        spectator.textContent = value;
+        this.elements.spectators.insertAdjacentElement("beforeend", spectator);
       }
       this.isSpectating = this.client.spectators.get(this.client.playerId()) !== null;
       this.spectatorOverlay.setEnabled(this.isSpectating);
@@ -292,8 +301,12 @@ export class GameUi {
     this.elements.toggleSpectatorPassword.onclick = () => {
       this.client.connected() && this.client.auth(this.elements.spectatorPassword.value).then(isAuthed => {
         if (!isAuthed) {
+          this.elements.spectatorPassword.classList.remove("is-valid");
+          this.elements.spectatorPassword.classList.add("is-invalid");
           return;
         }
+        this.elements.spectatorPassword.classList.remove("is-invalid");
+        this.elements.spectatorPassword.classList.add("is-valid");
         this.client.spectators.setOption("writeProtected", !(this.client.spectators.options.writeProtected ?? false));
       });
     };
@@ -314,7 +327,7 @@ export class GameUi {
     // Hack for settings menu
     const doNotClose = ['LABEL', 'SELECT', 'OPTION'];
     for (const menu of Array.from(document.querySelectorAll('.dropdown-menu'))) {
-      $(menu.parentElement!).on('hide.bs.dropdown', (e: Event) => {
+        menu.parentElement!.addEventListener('hide.bs.dropdown', (e: Event) => {
         // @ts-ignore
         const target: HTMLElement | undefined = e.clickEvent?.target;
         if (target && doNotClose.indexOf(target.tagName) !== -1) {
@@ -324,7 +337,7 @@ export class GameUi {
     }
 
     // @ts-ignore
-    $('[data-toggle="tooltip"]').tooltip();
+    // $('[data-toggle="tooltip"]').tooltip();
   }
 
   private updateSetup(): void {
@@ -378,13 +391,22 @@ export class GameUi {
       }
     }
   }
-
-  private updateAka(event: Event): void {
+  private setupAka(): void {
     if (this.elements.aka.value === "-") {
+      this.elements.akaText.disabled = false;
+      this.elements.akaText.focus();
+      this.elements.akaText.value = "";
+      this.elements.akaText.placeholder = "5m5p5s5z";
       return;
     }
-
+    this.elements.akaText.disabled = true;
+    this.elements.akaText.placeholder = i18next.t("aka.no-aka");
     this.elements.akaText.value = this.elements.aka.value;
+  }
+
+
+  private updateAka(event: Event): void {
+    this.setupAka();
   }
 
   private updateAkaText(event: FocusEvent): void {
@@ -482,12 +504,12 @@ export class GameUi {
 
   private showSetup(): void {
     // @ts-ignore
-    $('#setup-group').collapse('show');
+    bootstrap.Collapse.getInstance(document.getElementById('setup-group')).show();
   }
 
   private hideSetup(): void {
     // @ts-ignore
-    $('#setup-group').collapse('hide');
+    bootstrap.Collapse.getInstance(document.getElementById('setup-group')).hide();
   }
 
 }

@@ -1,0 +1,61 @@
+{
+    "take-seat": "坐下",
+    "click-and-hold-to-unseat": "按住请他离坐",
+    "deal-btn": "发牌",
+    "setup": "设置",
+    "deal": {
+        "type": "发牌模式：",
+        "unshuffled": "仅牌山（不洗牌）",
+        "hands": "手牌 + 牌山",
+        "initial": "仅牌山",
+        "winds": "风牌（用于确定座位）"
+    },
+    "game": {
+        "type": "游戏模式：",
+        "four-player": "四人",
+        "three-player": "三人",
+        "minefield": "二人 十七步",
+        "bamboo": "二人 清一色",
+        "washizu": "鹫津",
+        "demo": "演示"
+    },
+    "aka": {
+        "dora": "宝牌：",
+        "no-aka": "无宝牌",
+        "5m5p5s": "赤五 × 3",
+        "5m55p5s": "赤五 × 4",
+        "5z": "赤白板",
+        "5m5p5s5z": "赤白板，赤五 × 3",
+        "5m55p5s5z": "赤白板，赤五 × 4",
+        "custom": "自定义"
+    },
+    "starting-point": "起始点数：",
+    "dealer": "亲家",
+    "honba": "本场",
+    "connect": "连接",
+    "disonnect": "断开连接",
+    "nick": "昵称",
+    "leave-seat": "离开座位",
+    "add-spectator-password": "开启观众密码",
+    "remove-spectator-password": "关闭观众密码",
+    "spectator-password": "观众密码",
+    "spectate": "观看游戏",
+    "spectators": "观众",
+    "stop-spectate": "结束观看",
+    "upload-table-cloth": "上传桌布",
+    "reset-table-cloth": "重置桌布",
+    "more": "更多",
+    "instructions": {
+        "title": "操作指南",
+        "text": "<b>拖动鼠标</b> 来移动或选择<br>按 <b>F</b> 或 <b>右击</b> 翻转或旋转<br>按 <b>R</b> 向后旋转； 例如盖下你的手牌<br>按住 <b>空格</b>（或按 <b>Q</b>）向下看<br>按住 <b>Z</b> 放大<br>按住 <b>X</b> 缩小<br>按 <b>P</b> 切换透视模式"
+    },
+    "settings": "设置",
+    "perspective-mode": "透视模式",
+    "benchmark-mode": "基准测试模式（不限制 FPS）",
+    "mute-sound": "静音",
+    "sticky-mouse": "粘滞鼠标（点击抓取）",
+    "new-game": "新游戏",
+    "about": "关于本项目",
+    "failed-to-connect": "连接失败",
+    "trying-to-reconnect": "正在尝试重新连接……"
+}

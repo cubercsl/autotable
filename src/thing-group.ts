@@ -1,7 +1,6 @@
 import { Vector3, Euler, Mesh, Group, Material, InstancedMesh, Matrix4, BufferGeometry, MeshLambertMaterial, InstancedBufferGeometry, InstancedBufferAttribute, Vector4, Color, DoubleSide, MeshLambertMaterialParameters } from "three";
 import { AssetLoader } from "./asset-loader";
 import { ThingType } from "./types";
-import { type } from "jquery";
 
 const TILE_DU = 1 / 10;
 const TILE_DV = 1 / 8;

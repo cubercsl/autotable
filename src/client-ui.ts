@@ -2,6 +2,7 @@ import qs from 'qs';
 
 import { Client } from "./client";
 import { Game } from './base-client';
+import i18next from 'i18next';
 
 
 const TITLE_DISCONNECTED = 'Autotable';
@@ -101,7 +102,7 @@ export class ClientUi {
         () => this.connect(RECONNECT_ATTEMPTS, this.client.seat ?? undefined),
         RECONNECT_DELAY
       );
-      this.setStatus('Trying to reconnect...');
+      this.setStatus(i18next.t('trying-to-reconnect'));
     } else if (!game && this.reconnectAttempts > 0) {
       setTimeout(
         () => this.connect(this.reconnectAttempts - 1, this.reconnectSeat ?? undefined),
@@ -109,7 +110,7 @@ export class ClientUi {
     } else {
       (document.getElementById('connect')! as HTMLButtonElement).disabled = false;
       if (!this.disconnecting) {
-        this.setStatus('Failed to connect.');
+        this.setStatus(i18next.t('failed-to-connect'));
       }
     }
   }
