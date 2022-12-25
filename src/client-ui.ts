@@ -70,7 +70,7 @@ export class ClientUi {
     let path = window.location.pathname;
     path = path.substring(1, path.lastIndexOf('/')+1);
     const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const wsHost = window.location.host;
+    const wsHost = process.env.WS_HOST || window.location.host;
     const wsPath = path + 'ws';
 
     if (env !== 'production') {
