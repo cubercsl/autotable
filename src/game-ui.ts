@@ -136,6 +136,7 @@ export class GameUi {
     this.elements.nick.value = localStorage.getItem("nick") ?? "";
     this.setupEvents();
     this.setupDealButton();
+    this.updateSeats();
   }
 
   private trySetSpectating(isSpectating: boolean): void {
@@ -289,7 +290,7 @@ export class GameUi {
     };
 
     this.elements.toggleSpectatorPassword.onclick = () => {
-      this.client.auth(this.elements.spectatorPassword.value).then(isAuthed => {
+      this.client.connected() && this.client.auth(this.elements.spectatorPassword.value).then(isAuthed => {
         if (!isAuthed) {
           return;
         }
