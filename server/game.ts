@@ -91,57 +91,45 @@ export class Game {
     }
 
     const sendToAll: Array<Entry> = [];
-    const sendToOthers: Array<Entry> = [];
 
     for (const [kind, key, value] of entries) {
+      console.log(`[${this.gameId}] update ${kind} ${key} ${value})`)
+
       if (this.writeProtected.get(kind)){
         if (!senderId || !this.isAuthed(senderId) && (!this.perPlayer.get(kind) || this.clients.get(senderId))) {
           continue;
         }
         sendToAll.push([kind, key, value]);
       } else {
-        sendToOthers.push([kind, key, value]);
+        sendToAll.push([kind, key, value]);
       }
 
-      if (this.ephemeral.get(kind)) {
-        continue;
+      if (!this.ephemeral.get(kind)) {
+        let collection = this.collections.get(kind);
+        if (!collection) {
+          collection = new Map();
+          this.collections.set(kind, collection);
+        }
+        if (value !== null) {
+          collection.set(key, value);
+        } else {
+          collection.delete(key);
+        }
       }
 
       if (kind === 'unique') {
         this.unique.set(key as string, value);
-        continue;
       }
-
       if (kind === 'ephemeral') {
         this.ephemeral.set(key as string, value);
-        continue;
       }
-
       if (kind === 'perPlayer') {
         this.perPlayer.set(key as string, value);
-        continue;
       }
-
       if (kind === 'writeProtected' && this.isAuthed(senderId)) {
         this.writeProtected.set(key as string, value);
-        continue;
       }
 
-      let collection = this.collections.get(kind);
-      if (!collection) {
-        collection = new Map();
-        this.collections.set(kind, collection);
-      }
-      if (value !== null) {
-        collection.set(key, value);
-      } else {
-        collection.delete(key);
-      }
-    }
-
-    if (sendToOthers.length > 0) {
-      const message: Message = {type: 'UPDATE', entries: sendToOthers, full: false};
-      this.sendAll(message, [senderId]);
     }
 
     if (sendToAll.length > 0) {

@@ -181,12 +181,13 @@
                     </button>
                 </div>
 
-                <button disabled class="btn btn-sm btn-outline-secondary text-white w-100 me-2 mt-2 text-break" id="setup-desc">
-                    &nbsp;
-                </button>
-                <button class="btn btn-dark btn-sm dropdown-toggle mt-2 w-100" id="toggle-setup" data-i18n="setup"
-                    data-bs-toggle="collapse" data-bs-target="#setup-group">Setup</button>
-
+                <div class="d-flex mt-2">
+                    <button disabled class="btn btn-sm btn-outline-secondary text-white w-100 me-2 text-break" id="setup-desc"></button>
+                    <div class="dropdown">
+                    <button class="btn btn-dark btn-sm dropdown-toggle" id="toggle-setup" data-i18n="setup"
+                        data-bs-toggle="collapse" data-bs-target="#setup-group">Setup</button>
+                    </div>
+                </div>
                 <div id="setup-group" class="collapse" data-bs-toggle="true">
                     <select class="dark-select form-control form-control-sm mt-2" id="deal-type">
                         <option disabled data-i18n="deal.type">Deal type:</option>
@@ -286,46 +287,46 @@
                     <button class="btn btn-dark btn-sm w-100" id="reset-table-cloth" data-i18n="reset-table-cloth">Reset Table Cloth</button>
                 </div>
 
-                <div class="dropdown mt-2 w-100 d-grid">
-                    <button class="btn btn-dark btn-sm dropdown-toggle w-100" data-bs-toggle="dropdown" data-i18n="more">
-                        More
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-right p-3 text-light" style="width: 350px;">
-                        <h4 data-i18n="instructions.title">Instructions</h4>
-                        <p data-i18n="instructions.text">
-                        <b>Drag mouse</b> to move or select<br>
-                        Press <b>F</b> or <b>right-click</b> to flip or rotate<br>
-                        Press <b>R</b> to rotate backwards; for example hide your hand<br>
-                        Hold <b>SPACE</b> (or press <b>Q</b>) to look down<br>
-                        Hold <b>Z</b> to zoom in<br>
-                        Hold <b>X</b> to zoom out<br>
-                        Press <b>P</b> to toggle perspective mode
-                        </p>
-                        <h4 data-i18n="settings">Settings</h4>
-                        <div class=" d-grid">
-                            <label class="dropdown-menu-item">
-                                <input type="checkbox" id="perspective">
-                                <span data-i18n="perspective-mode">Perspective mode</span>
-                            </label>
-                            <label>
-                                <input type="checkbox" id="benchmark">
-                                <span data-i18n="benchmark-mode">Benchmark mode (don't limit FPS)</span>
-                            </label>
-                            <label>
-                                <input type="checkbox" id="muted">
-                                <span data-i18n="mute-sound">Mute sound</span>
-                            </label>
-                            <label>
-                                <input type="checkbox" id="sticky" >
-                                <span data-i18n="sticky-mouse">Sticky mouse (click to grab)</span>
-                            </label>
-                            <button class="btn btn-secondary btn-sm mt-2" id="new-game" data-i18n="new-game">New game</button>
+                <div class="d-flex">
+                    <select class="dark-select form-control form-control-sm mt-2 me-2" name="language" id="languageSwitcher"></select>
+                    <div class="dropdown mt-2 w-100 d-grid">
+                        
+                        <button class="btn btn-dark btn-sm dropdown-toggle w-100" data-bs-toggle="dropdown" data-i18n="more">
+                            More
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right p-3 text-light" style="width: 350px;">
+                            <h4 data-i18n="instructions.title">Instructions</h4>
+                            <p data-i18n="instructions.text">
+                            <b>Drag mouse</b> to move or select<br>
+                            Press <b>F</b> or <b>right-click</b> to flip or rotate<br>
+                            Press <b>R</b> to rotate backwards; for example hide your hand<br>
+                            Hold <b>SPACE</b> (or press <b>Q</b>) to look down<br>
+                            Hold <b>Z</b> to zoom in<br>
+                            Hold <b>X</b> to zoom out<br>
+                            Press <b>P</b> to toggle perspective mode
+                            </p>
+                            <h4 data-i18n="settings">Settings</h4>
+                            <div class=" d-grid">
+                                <label class="dropdown-menu-item">
+                                    <input type="checkbox" id="perspective">
+                                    <span data-i18n="perspective-mode">Perspective mode</span>
+                                </label>
+                                <label>
+                                    <input type="checkbox" id="benchmark">
+                                    <span data-i18n="benchmark-mode">Benchmark mode (don't limit FPS)</span>
+                                </label>
+                                <label>
+                                    <input type="checkbox" id="muted">
+                                    <span data-i18n="mute-sound">Mute sound</span>
+                                </label>
+                                <label>
+                                    <input type="checkbox" id="sticky" >
+                                    <span data-i18n="sticky-mouse">Sticky mouse (click to grab)</span>
+                                </label>
+                                <button class="btn btn-secondary btn-sm mt-2" id="new-game" data-i18n="new-game">New game</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="d-flex mt-2">
-                    <select class="dark-select form-control form-control-sm mt-2" name="language" id="languageSwitcher"></select>
                 </div>
 
                 <div class="mt-2">

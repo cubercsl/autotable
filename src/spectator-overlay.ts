@@ -362,7 +362,12 @@ export class SpectatorOverlay {
 
     this.roundDisplay.innerText = rotation === 0 ? "東" : "南";
     const dealer = this.client.match.get(0)?.dealer ?? 0;
-    this.roundDisplay.innerText += `${((4 + dealer - seat) % 4) + 1}局`;
+    if (this.world.conditions.gameType == GameType.BAMBOO || this.world.conditions.gameType == GameType.MINEFIELD) {
+      // two players game
+      this.roundDisplay.innerText += `${((4 + dealer - seat) >> 1 & 1) + 1}局`;
+    } else {
+      this.roundDisplay.innerText += `${((4 + dealer - seat) & 3) + 1}局`;
+    }
   }
 
   setEnabled(isEnabled: boolean): void {
