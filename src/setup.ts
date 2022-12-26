@@ -284,7 +284,25 @@ export class Setup {
 
   getScores(): {seats: Array<number | null>, remaining: number} {
     const scores = new Array(4).fill(-20000);
-    scores.push((25000 + 20000) * 4); // remaining
+    const start: Record<Points, number> = {
+      '5': 5000,
+      '8': 8000,
+      '25': 25000,
+      '30' : 30000,
+      '35': 35000,
+      '40': 40000,
+      '100': 100000,
+    };
+    const player: Record<GameType, number> = {
+      FOUR_PLAYER :4,
+      FOUR_PLAYER_DEMO: 4,
+      THREE_PLAYER: 3,
+      BAMBOO: 2,
+      MINEFIELD: 2,
+      WASHIZU: 4,
+    }
+
+    scores.push((start[this.conditions.points] + 20000) * player[this.conditions.gameType]); // remaining
     const stickScores = [100, 500, 1000, 5000, 10000, 10000];
 
     for (const slot of this.slots.values()) {

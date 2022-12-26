@@ -169,6 +169,7 @@ export class GameUi {
 
     this.client.spectators.on('optionsChanged', (options) => {
       this.elements.toggleSpectatorPassword.innerText =  i18next.t(`${options.writeProtected ? "remove" : "add"}-spectator-password`);
+      this.elements.toggleSpectatorPassword.classList.toggle("text-bg-danger", options.writeProtected);
     });
 
     this.client.seats.on('update', this.updateSeats.bind(this));

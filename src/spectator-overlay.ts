@@ -1,6 +1,6 @@
 import { Client } from "./client";
 import { World } from "./world";
-import { ThingType } from './types';
+import { GameType, ThingType } from './types';
 import { setVisibility } from './game-ui';
 
 function numberWithCommas(x: number, addSign?: boolean): string {
@@ -60,6 +60,7 @@ export class SpectatorOverlay {
       this.updateHonba();
       this.updateRound();
       this.updateDealer();
+      this.updateScores(true);
     });
 
     this.client.things.on('update', (entries, isFull) => {
@@ -81,32 +82,33 @@ export class SpectatorOverlay {
           this.updateSeatings(seat);
           continue;
         }
-
-        if (info?.slotName.startsWith("wall") && info.rotationIndex === 1) {
-          const indicator = this.matchStatusDisplay.querySelector(`[data-dora-id='${key}']`);
-          if (indicator) {
-            continue;
-          }
-          const index = thing.getTypeIndexNoFlags();
-          let x = index % 9;
-          const y = index % 40 / 9 | 0;
-          if (y < 3) {
-            x = (x + 1) % 9;
-          } else if (x < 4) {
-            x = (x + 1) % 4;
-          } else {
-            x = 4 + (x - 3) % 3;
-          }
-          this.matchStatusDisplay.insertAdjacentHTML("beforeend", `
-            <div class="dora" data-dora-id="${key}">
-              <div style="background-position: ${100 / 9 * x}% ${100 / 7 * y}%"></div>
-            </div>
-          `);
-        } else if (thing.slot.name.startsWith("wall")) {
-          const indicator = this.matchStatusDisplay.querySelector(`[data-dora-id='${key}']`);
-          if (indicator) {
-            indicator.remove();
-            continue;
+        if (this.world.conditions.gameType !== GameType.MINEFIELD) {
+          if (info?.slotName.startsWith("wall") && info.rotationIndex === 1) {
+            const indicator = this.matchStatusDisplay.querySelector(`[data-dora-id='${key}']`);
+            if (indicator) {
+              continue;
+            }
+            const index = thing.getTypeIndexNoFlags();
+            let x = index % 9;
+            const y = index % 40 / 9 | 0;
+            if (y < 3) {
+              x = (x + 1) % 9;
+            } else if (x < 4) {
+              x = (x + 1) % 4;
+            } else {
+              x = 4 + (x - 3) % 3;
+            }
+            this.matchStatusDisplay.insertAdjacentHTML("beforeend", `
+              <div class="dora" data-dora-id="${key}">
+                <div style="background-position: ${100 / 9 * x}% ${100 / 7 * y}%"></div>
+              </div>
+            `);
+          } else if (thing.slot.name.startsWith("wall")) {
+            const indicator = this.matchStatusDisplay.querySelector(`[data-dora-id='${key}']`);
+            if (indicator) {
+              indicator.remove();
+              continue;
+            }
           }
         }
 
@@ -162,8 +164,10 @@ export class SpectatorOverlay {
       const scores = this.world.setup.getScores().seats;
       for (let i = 0; i < 4; i++) {
         if (scores[i] === null) {
+          setVisibility(this.playerDisplays[i], false);
           continue;
         }
+        setVisibility(this.playerDisplays[i], true);
 
         const change = scores[i]! - (this.scores[i] ?? 0) - (this.scoreChanges[i] ?? 0);
         if (skipAnimation) {
