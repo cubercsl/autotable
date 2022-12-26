@@ -1,6 +1,5 @@
 import i18next from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
-import { env } from "process";
 // @ts-ignore
 import bootstrap from 'bootstrap/dist/js/bootstrap';
 // @ts-ignore
@@ -28,7 +27,7 @@ i18next.use(LanguageDetector).init({
         order: ["localStorage", "navigator"],
         caches: ["localStorage"]
     },
-    debug: env.NODE_ENV !== "production",
+    debug: process.env.NODE_ENV !== "production",
     resources: {
         en: { translation: en },
         zh_CN: { translation: zh_CN }

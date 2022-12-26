@@ -144,7 +144,7 @@ export class GameUi {
   }
 
   private trySetSpectating(isSpectating: boolean): void {
-    this.client.auth(this.elements.spectatorPassword.value).then(isAuthed => {
+    this.client.connected() && this.client.auth(this.elements.spectatorPassword.value).then(isAuthed => {
       if (!isAuthed && this.client.spectators.options.writeProtected) {
         this.elements.spectatorPassword.classList.remove("is-valid");
         this.elements.spectatorPassword.classList.add("is-invalid");
@@ -186,7 +186,7 @@ export class GameUi {
         }
 
         if (element) {
-          element.innerText = value;
+          element.textContent = value;
           continue;
         }
         const spectator = document.createElement("div");
@@ -215,6 +215,11 @@ export class GameUi {
         return;
       }
       this.elements.spectatorPassword.value = password;
+    });
+    this.client.on('disconnect', () => {
+      // disconnect from spectator mode
+      this.isSpectating = false;
+      this.client.spectators.set(this.client.playerId(), null);
     });
     for (let i = 0; i < 4; i++) {
       this.elements.takeSeat[i].onclick = () => {
