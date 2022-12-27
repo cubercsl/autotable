@@ -171,9 +171,20 @@
                 </button>
             </div>
         </div>
+        <button class="btn btn-secondary" id="toggle-sidebar" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-layout-sidebar-inset" viewBox="0 0 16 16">
+                <path d="M14 2a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h12zM2 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H2z"/>
+                <path d="M3 4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+            </svg>
+        </button>    
 
-        <div class="d-flex align-items-center" id="sidebar">
-            <div class="collapsed container text-light py-3 pr-0" id="sidebar-body" style="display: none">
+
+        <div class="offcanvas offcanvas-start" id="sidebar">
+            <div class="offcanvas-header" tabindex="-1" aria-labelledby="sidebar-header">
+                <h5 class="offcanvas-title text-white" id="sidebar-header">Autotable</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body collapsed container text-light overflow-visible" id="sidebar-body">
                 <div class="d-flex">
                     <button class="btn btn-warning btn-sm w-100" id="deal">
                         <div class="btn-progress"></div>
@@ -343,7 +354,6 @@
                     </small>
                 </div>
             </div>
-            <h2 class="text-light px-2" id="toggle-sidebar"></h2>
         </div>
     </div>
     <script type="module" src="./src/index.ts"></script>

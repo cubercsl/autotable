@@ -1,4 +1,4 @@
-import { Group, Mesh, Vector3, MeshBasicMaterial, MeshLambertMaterial, Object3D, PlaneBufferGeometry, InstancedMesh, BufferGeometry, PlaneGeometry, CanvasTexture, Vector2 } from "three";
+import { Group, Mesh, Vector3, MeshBasicMaterial, MeshLambertMaterial, Object3D, PlaneGeometry, InstancedMesh, BufferGeometry } from "three";
 import { mergeBufferGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils';
 
 import { World } from "./world";
@@ -6,7 +6,7 @@ import { Client } from "./client";
 import { AssetLoader } from "./asset-loader";
 import { Center } from "./center";
 import { ThingParams, ThingGroup, TileThingGroup, StickThingGroup, MarkerThingGroup } from "./thing-group";
-import { ThingType, Place, Size } from "./types";
+import { ThingType, Place } from "./types";
 
 export interface Render {
   type: ThingType;
@@ -51,7 +51,7 @@ export class ObjectView {
     this.thingGroups.set(ThingType.STICK, new StickThingGroup(this.assetLoader, this.mainGroup));
     this.thingGroups.set(ThingType.MARKER, new MarkerThingGroup(this.assetLoader, this.mainGroup));
 
-    const plane = new PlaneBufferGeometry(1, 1, 1);
+    const plane = new PlaneGeometry(1, 1, 1);
     let material = new MeshBasicMaterial({
       transparent: true,
       opacity: 0.1,

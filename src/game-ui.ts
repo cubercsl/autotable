@@ -52,7 +52,6 @@ export class GameUi {
   elements: {
     sidebarBody: HTMLDivElement;
     selection: HTMLDivElement;
-    toggleSidebar: HTMLDivElement;
     deal: HTMLButtonElement;
     toggleDealer: HTMLButtonElement;
     toggleHonba: HTMLButtonElement;
@@ -98,7 +97,6 @@ export class GameUi {
     this.elements = {
       sidebarBody: document.getElementById('sidebar-body')! as HTMLDivElement,
       selection: document.getElementById('selection')! as HTMLDivElement,
-      toggleSidebar: document.getElementById('toggle-sidebar')! as HTMLDivElement,
       deal: document.getElementById('deal') as HTMLButtonElement,
       toggleDealer: document.getElementById('toggle-dealer') as HTMLButtonElement,
       toggleHonba: document.getElementById('toggle-honba') as HTMLButtonElement,
@@ -253,12 +251,6 @@ export class GameUi {
         this.mainView.spectateCall(i);
       };
     }
-
-    this.elements.toggleSidebar.onclick = () => {
-      const isVisible = this.elements.sidebarBody.getAttribute("style")?.length! > 0;
-      setVisibility(this.elements.sidebarBody, isVisible);
-      this.elements.toggleSidebar.innerHTML = isVisible ? "&lsaquo;" : "&rsaquo;";
-    };
 
     for (let i = 0; i < 4; i++) {
       this.setupProgressButton(this.elements.kick[i], 1500, () => {
@@ -480,6 +472,7 @@ export class GameUi {
       this.world.deal(dealType, gameType, aka, points);
       this.resetDealType();
       this.hideSetup();
+      this.hideSidebar();
     });
   }
 
@@ -523,13 +516,19 @@ export class GameUi {
   }
 
   private showSetup(): void {
-    // @ts-ignore
-    bootstrap.Collapse.getInstance(document.getElementById('setup-group')).show();
+    bootstrap.Collapse.getInstance(document.getElementById('setup-group')!)?.show();
   }
 
   private hideSetup(): void {
-    // @ts-ignore
-    bootstrap.Collapse.getInstance(document.getElementById('setup-group')).hide();
+    bootstrap.Collapse.getInstance(document.getElementById('setup-group')!)?.hide();
+  }
+
+  private showSidebar(): void {
+    bootstrap.Offcanvas.getInstance(document.getElementById('sidebar')!)?.show();
+  }
+
+  private hideSidebar(): void {
+    bootstrap.Offcanvas.getInstance(document.getElementById('sidebar')!)?.hide();
   }
 
 }
