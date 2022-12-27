@@ -52,6 +52,7 @@ export class GameUi {
   elements: {
     sidebarBody: HTMLDivElement;
     selection: HTMLDivElement;
+    toggleSidebar: HTMLButtonElement;
     deal: HTMLButtonElement;
     toggleDealer: HTMLButtonElement;
     toggleHonba: HTMLButtonElement;
@@ -97,6 +98,7 @@ export class GameUi {
     this.elements = {
       sidebarBody: document.getElementById('sidebar-body')! as HTMLDivElement,
       selection: document.getElementById('selection')! as HTMLDivElement,
+      toggleSidebar: document.getElementById('toggle-sidebar')! as HTMLButtonElement,
       deal: document.getElementById('deal') as HTMLButtonElement,
       toggleDealer: document.getElementById('toggle-dealer') as HTMLButtonElement,
       toggleHonba: document.getElementById('toggle-honba') as HTMLButtonElement,
@@ -173,6 +175,7 @@ export class GameUi {
     this.client.spectators.on('update', (entries) => {
       const spectators = [...this.client.spectators.entries()].filter(([key, value]) => value !== null);
       setVisibility(this.elements.spectators, spectators.length > 0);
+      this.elements.toggleSidebar.classList.toggle("btn-success", spectators.length > 0);
       for (const [key, value] of entries) {
         const element = document.querySelector(`[data-spectator-id='${key}']`)! as HTMLDivElement;
         if (value === null) {
@@ -192,7 +195,7 @@ export class GameUi {
         spectator.innerHTML = `<button class="spectator mt-2 btn badge btn-success w-100 py-2"
           data-bs-toggle="tooltip" data-bs-placement="right"
           data-i18n="click-and-hold-to-unseat", data-i18n-attr="title"
-          title=${i18next.t("click-and-hold-to-unseat")}>
+          title="${i18next.t("click-and-hold-to-unseat")}">
           <div class="btn-progress"></div>
           <span class="btn-progress-text"></span>
         </button>`;
@@ -205,9 +208,9 @@ export class GameUi {
             this.elements.spectatorPassword.classList.toggle("is-invalid", !valid);
             if (valid) {
               this.client.spectators.set(key, null);
+              tooltip.hide();
             }
           });
-          tooltip.hide();
         });
         this.elements.spectators.insertAdjacentElement("beforeend", spectator);
       }
