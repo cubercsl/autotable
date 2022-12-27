@@ -106,7 +106,7 @@ body
 #center, #name-plate-0, #name-plate-1, #name-plate-2, #name-plate-3
     display: none
 
-#deal
+#deal, .spectator
     position: relative
 
 #deal .btn-progress 
@@ -116,6 +116,9 @@ body
 .kick .btn-progress 
     background: rgb(90, 98, 104)
 
+.spectator .btn-progress
+    background: #20c997
+
 .btn-progress
     position: absolute
     top: 0
@@ -124,6 +127,8 @@ body
     width: 0%
     background: #fff2ca
     transition: width 600ms
+    border-radius: inherit
+
 .btn-progress-text
     position: relative
 

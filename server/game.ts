@@ -93,7 +93,6 @@ export class Game {
     const sendToAll: Array<Entry> = [];
 
     for (const [kind, key, value] of entries) {
-      console.log(`[${this.gameId}] update ${kind} ${key} ${value})`)
 
       if (this.writeProtected.get(kind)){
         if (!senderId || !this.isAuthed(senderId) && (!this.perPlayer.get(kind) || this.clients.get(senderId))) {

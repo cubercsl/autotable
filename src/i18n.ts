@@ -1,7 +1,7 @@
 import i18next from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
-// @ts-ignore
-import bootstrap from 'bootstrap/dist/js/bootstrap';
+import * as bootstrap from 'bootstrap';
+
 // @ts-ignore
 import en from "../i18n/en.json";
 // @ts-ignore
@@ -56,6 +56,5 @@ i18next.use(LanguageDetector).init({
     rerender();
 });
 
-export default i18next
 
     

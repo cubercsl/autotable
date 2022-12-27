@@ -7,8 +7,7 @@ import { SpectatorOverlay } from './spectator-overlay';
 import { AssetLoader } from './asset-loader';
 import { ObjectView } from './object-view';
 import i18next from 'i18next';
-// @ts-ignore
-import bootstrap from 'bootstrap/dist/js/bootstrap';
+import * as bootstrap from 'bootstrap';
 
 export function setVisibility(element: HTMLElement, isVisible: boolean): void {
   if (isVisible) {
@@ -145,15 +144,13 @@ export class GameUi {
 
   private trySetSpectating(isSpectating: boolean): void {
     this.client.connected() && this.client.auth(this.elements.spectatorPassword.value).then(isAuthed => {
-      if (!isAuthed && this.client.spectators.options.writeProtected) {
-        this.elements.spectatorPassword.classList.remove("is-valid");
-        this.elements.spectatorPassword.classList.add("is-invalid");
-        return;
+      const valid = isAuthed || !this.client.spectators.options.writeProtected;
+      this.elements.spectatorPassword.classList.toggle("is-valid", valid);
+      this.elements.spectatorPassword.classList.toggle("is-invalid", !valid);
+      if (valid) {
+        const nick = this.elements.nick.value.length > 0 ? this.elements.nick.value : "不明";
+        this.client.spectators.set(this.client.playerId(), isSpectating ? nick : null);
       }
-      this.elements.spectatorPassword.classList.remove("is-invalid");
-      this.elements.spectatorPassword.classList.add("is-valid");
-      const nick = this.elements.nick.value.length > 0 ? this.elements.nick.value : "不明";
-      this.client.spectators.set(this.client.playerId(), isSpectating ? nick : null);
     });
   }
 
@@ -169,7 +166,8 @@ export class GameUi {
 
     this.client.spectators.on('optionsChanged', (options) => {
       this.elements.toggleSpectatorPassword.innerText =  i18next.t(`${options.writeProtected ? "remove" : "add"}-spectator-password`);
-      this.elements.toggleSpectatorPassword.classList.toggle("text-bg-danger", options.writeProtected);
+      this.elements.toggleSpectatorPassword.classList.toggle("btn-dark", !options.writeProtected);
+      this.elements.toggleSpectatorPassword.classList.toggle("btn-danger", options.writeProtected);
     });
 
     this.client.seats.on('update', this.updateSeats.bind(this));
@@ -187,17 +185,35 @@ export class GameUi {
         }
 
         if (element) {
-          element.textContent = value;
+          element.querySelector('.btn-progress-text')!.textContent = value;
           continue;
         }
         const spectator = document.createElement("div");
-        spectator.classList.add("mt-2", "badge", "text-bg-success", "w-100", "py-2");
+        spectator.classList.add("d-flex");
         spectator.dataset.spectatorId = key;
-        spectator.textContent = value;
+        spectator.innerHTML = `<button class="spectator mt-2 btn badge btn-success w-100 py-2"
+          data-bs-toggle="tooltip" data-bs-placement="right"
+          data-i18n="click-and-hold-to-unseat", data-i18n-attr="title"
+          title=${i18next.t("click-and-hold-to-unseat")}>
+          <div class="btn-progress"></div>
+          <span class="btn-progress-text"></span>
+        </button>`;
+        spectator.querySelector('.btn-progress-text')!.textContent = value;
+        const tooltip = new bootstrap.Tooltip(spectator.querySelector('[data-bs-toggle="tooltip"]')!);
+        this.setupProgressButton(spectator.querySelector('button')!, 1500, () => {
+          this.client.connected() && this.client.auth(this.elements.spectatorPassword.value).then(isAuthed => {
+            const valid = isAuthed || !this.client.spectators.options.writeProtected;
+            this.elements.spectatorPassword.classList.toggle("is-valid", valid);
+            this.elements.spectatorPassword.classList.toggle("is-invalid", !valid);
+            if (valid) {
+              this.client.spectators.set(key, null);
+            }
+          });
+          tooltip.hide();
+        });
         this.elements.spectators.insertAdjacentElement("beforeend", spectator);
       }
       this.isSpectating = this.client.spectators.get(this.client.playerId()) !== null;
-      this.spectatorOverlay.setEnabled(this.isSpectating);
       this.spectatorOverlay.setEnabled(this.isSpectating);
       setVisibility(this.elements.selection, !this.isSpectating);
 
@@ -306,13 +322,11 @@ export class GameUi {
 
     this.elements.toggleSpectatorPassword.onclick = () => {
       this.client.connected() && this.client.auth(this.elements.spectatorPassword.value).then(isAuthed => {
+        this.elements.spectatorPassword.classList.toggle("is-valid", isAuthed);
+        this.elements.spectatorPassword.classList.toggle("is-invalid", !isAuthed);
         if (!isAuthed) {
-          this.elements.spectatorPassword.classList.remove("is-valid");
-          this.elements.spectatorPassword.classList.add("is-invalid");
           return;
         }
-        this.elements.spectatorPassword.classList.remove("is-invalid");
-        this.elements.spectatorPassword.classList.add("is-valid");
         this.client.spectators.setOption("writeProtected", !(this.client.spectators.options.writeProtected ?? false));
       });
     };
