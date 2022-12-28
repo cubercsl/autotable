@@ -154,7 +154,7 @@ export class MainView {
       }
 
       if (info?.slotName.startsWith('wall')) {
-        // Show hand of player who just drew tile from wall.
+        // Show hand of player who just drew tile from wall or washizu bag.
         if (info.claimedBy !== null && thing.rotationIndex !== 1) {
           this.autoQueue.push({
             seat: info.claimedBy,

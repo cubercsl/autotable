@@ -161,7 +161,7 @@ export class Center {
     this.dealer = this.client.match.get(0)?.dealer ?? null;
     this.honba = this.client.match.get(0)?.honba ?? 0;
     this.remainingTiles = [...this.client.things.entries()].filter(([i, t]) =>
-      t.slotName.startsWith("washizu.bag") && t.claimedBy === null).length;
+      t.slotName.startsWith("wall.washizu.bag") && t.claimedBy === null).length;
 
     this.dirty = true;
   }

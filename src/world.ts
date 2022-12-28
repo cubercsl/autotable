@@ -599,13 +599,14 @@ export class World {
 
       const slot = thing.slot;
 
+      const hidden = thing.slot?.phantom ?? false;
+      const transparent = thing.isTransparent();  
+
       const bottom =
-        !held &&
+        !held && !hidden &&
         slot.links.up !== undefined &&
         (slot.links.up.thing === null ||
          slot.links.up.thing.claimedBy !== null);
-
-      const hidden = thing.slot?.phantom ?? false;
 
       toRender.push({
         type: thing.type,
@@ -617,6 +618,7 @@ export class World {
         temporary,
         bottom,
         hidden,
+        transparent,
       });
     }
     this.objectView.updateThings(toRender);

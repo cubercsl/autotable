@@ -91,7 +91,7 @@ export const DEALS: Record<GameType, Partial<Record<DealType, Array<DealPart>>>>
     INITIAL: [
       {
         ranges: [
-          ['washizu.bag.0', 0, 136],
+          ['wall.washizu.bag.0', 0, 136],
         ],
         absolute: true
       },
@@ -104,7 +104,7 @@ export const DEALS: Record<GameType, Partial<Record<DealType, Array<DealPart>>>>
       },
       {
         ranges: [
-          ['washizu.bag.0', 0, 132],
+          ['wall.washizu.bag.0', 0, 132],
         ],
         absolute: true
       },
@@ -121,7 +121,7 @@ export const DEALS: Record<GameType, Partial<Record<DealType, Array<DealPart>>>>
       },
       {
         ranges: [
-          ['washizu.bag.0', 0, 84],
+          ['wall.washizu.bag.0', 0, 84],
         ],
         absolute: true
       }

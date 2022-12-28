@@ -78,12 +78,10 @@ export class Thing {
     this.sent = false;
   }
 
-  release(local?: boolean): void {
+  release(): void {
     this.claimedBy = null;
     this.shiftSlot = null;
-    if (!local) {
-      this.sent = false;
-    }
+    this.sent = false;
   }
 
   getTypeIndexNoFlags(): number {

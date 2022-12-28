@@ -208,9 +208,9 @@ const START: Record<string, Slot> = {
     rotations: [Rotation.FACE_UP, Rotation.FACE_UP_SIDEWAYS],
   }),
 
-  'washizu.bag': new Slot({
-    name: 'washizu.bag',
-    group: 'washizu.bag',
+  'wall.washizu.bag': new Slot({
+    name: 'wall.washizu.bag',
+    group: 'wall.washizu.bag',
     type: ThingType.TILE,
     origin: new Vector3().subVectors(
       new Vector3(
@@ -332,8 +332,7 @@ export const SLOT_GROUPS: Record<GameType, Array<SlotGroup>> = {
     [start('hand'), row(14, undefined, {shift: true}), seats()],
     [start('hand.extra'), seats()],
     [start('meld'), column(4), row(4, -Size.TILE.x, {push: true, shift: true}), seats()],
-    [start('wall'), row(19), stack(), seats()],
-    [start('washizu.bag'), stack(136), seats([0])],
+    [start('wall.washizu.bag'), stack(136), seats([0])],
     [start('discard.washizu'), column(3, -Size.TILE.y), row(6, undefined, {push: true}), seats()],
     [start('discard.washizu.extra'), row(4, undefined, {push: true}), seats()],
 

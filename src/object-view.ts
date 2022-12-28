@@ -18,6 +18,7 @@ export interface Render {
   temporary: boolean;
   bottom: boolean;
   hidden: boolean;
+  transparent: boolean;
 }
 
 const MAX_SHADOWS = 300;
@@ -183,14 +184,15 @@ export class ObjectView {
 
       material.emissive.setHex(0);
       material.color.setHex(0xeeeeee);
+      material.opacity = 1;
+      material.transparent = thing.transparent;
+      material.depthTest = true;
+      obj.renderOrder = 0;
 
       if (thing.hidden) {
         material.transparent = true;
         material.opacity = 0.0;
       }
-
-      obj.renderOrder = 0;
-      material.depthTest = true;
 
       if (thing.hovered) {
         material.emissive.setHex(0x111111);
