@@ -6,7 +6,7 @@ This is a fork of riichinomics fork and the original autotable project. Extra fe
 * Spectator mode
 * Room passwords for spectating and playing
 * Some minor bug fixes
-* Backpork upstream unseat function
+* Backport some upstream useful things
 
 
 The documentation below is somewhat out of date, but you can still get the project running locally with make as described.
@@ -15,8 +15,8 @@ The documentation below is somewhat out of date, but you can still get the proje
 
 Autotable is a tabletop simulator for Riichi Mahjong.
 
-* Game: https://cubercsl.cn/autotable
-* About page: https://cubercsl.cn/autotable/about.html
+* Game: https://autotable.cubercsl.site
+* About page: https://autotable.cubercsl.site/about.html
 * Blog post: https://pwmarcz.pl/blog/autotable/
 
 ## Running
