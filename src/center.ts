@@ -11,7 +11,7 @@ export class Center {
   ctx: CanvasRenderingContext2D;
   texture: CanvasTexture;
 
-  scores: Array<number | null> = new Array(5).fill(null);
+  scores: Array<number | null> = new Array(4).fill(null);
   nicks: Array<string | null> = new Array(4).fill(null);
   dealer: number | null = null;
   honba = 0;
@@ -167,7 +167,7 @@ export class Center {
   }
 
   setScores(scores: Array<number | null>): void {
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 4; i++) {
       if (scores[i] !== this.scores[i]) {
         this.dirty = true;
       }
