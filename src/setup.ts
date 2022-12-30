@@ -107,13 +107,13 @@ export class Setup {
     let tileIndex = Math.floor(i / 4);
 
     if (conditions.gameType === GameType.BAMBOO) {
-      if (!((18 <= tileIndex && tileIndex < 27) || tileIndex === 36)) {
+      if (!((18 <= tileIndex && tileIndex < 27))) {
         return null;
       }
     }
 
     if (conditions.gameType === GameType.THREE_PLAYER) {
-      if ((1 <= tileIndex && tileIndex < 8) || tileIndex === 34) {
+      if ((1 <= tileIndex && tileIndex < 8)) {
         return null;
       }
     }
@@ -125,12 +125,22 @@ export class Setup {
       tileIndex |= 1 << 8;
     }
 
-    if ( conditions.aka[(tileNumber + 1) + tileSuit] > i % 4 ) {
-      tileIndex |= 1 << 9;
-    }
-
     if ( conditions.gameType === GameType.WASHIZU && i % 4 !== 0 ) {
+      tileIndex |= 1 << 12;
+      return tileIndex;
+    }
+  
+    const red = conditions.aka[0]?.[(tileNumber + 1) + tileSuit] ?? 0;
+    const blue = conditions.aka[1]?.[(tileNumber + 1) + tileSuit] ?? 0;
+    const gold = conditions.aka[2]?.[(tileNumber + 1) + tileSuit] ?? 0;
+
+    if ( red  > i % 4 ) {
+      tileIndex |= 1 << 9;
+    } else if ( red + blue  > i % 4 ) {
       tileIndex |= 1 << 10;
+    } else if ( red + blue + gold  > i % 4 ) {
+      tileIndex |= 1 << 10;
+      tileIndex |= 1 << 9;
     }
 
     return tileIndex;

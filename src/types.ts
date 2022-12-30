@@ -57,15 +57,16 @@ export enum GameType {
 interface GameTypeMeta {
   points: Points;
   seats: Array<number>;
+  akas: Array<string>;
 }
 
 export const GAME_TYPES: Record<GameType, GameTypeMeta> = {
-  FOUR_PLAYER: { points: '25', seats: [0, 1, 2, 3]},
-  FOUR_PLAYER_DEMO: { points: '25', seats: [0, 1, 2, 3]},
-  THREE_PLAYER: { points: '35', seats: [0, 1, 2]},
-  BAMBOO: { points: '100', seats: [0, 2]},
-  MINEFIELD: { points: '25', seats: [0, 2]},
-  WASHIZU: { points: '25', seats: [0, 1, 2, 3] },
+  FOUR_PLAYER: { points: '25', seats: [0, 1, 2, 3], akas: ['5m5p5s', '', '5m55p5s', '5z', '5m5p5s5z', '5m55p5s5z', '-'] },
+  FOUR_PLAYER_DEMO: { points: '25', seats: [0, 1, 2, 3], akas: ['5m5p5s', '', '5m55p5s', '5z', '5m5p5s5z', '5m55p5s5z', '-']},
+  THREE_PLAYER: { points: '35', seats: [0, 1, 2], akas: ['5p5s', '', '55p5s', '5z', '5p5s5z', '55p5s5z', '-']},
+  BAMBOO: { points: '100', seats: [0, 2], akas: ['5s', '', '-']},
+  MINEFIELD: { points: '25', seats: [0, 2], akas: ['5m5p5s', '', '5m55p5s', '5z', '5m5p5s5z', '5m55p5s5z', '-']},
+  WASHIZU: { points: '25', seats: [0, 1, 2, 3], akas: [''] },
 };
 
 export type Points = '5' | '8' | '25' | '30' | '35' | '40' | '100';
@@ -73,7 +74,7 @@ export type Points = '5' | '8' | '25' | '30' | '35' | '40' | '100';
 export interface Conditions {
   gameType: GameType;
   back: number; // 0 or 1
-  aka: Record<string, number>;
+  aka: Array<Record<string, number>>;
   points: Points;
   dealType: DealType;
 }

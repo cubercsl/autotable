@@ -17,35 +17,47 @@ export function setVisibility(element: HTMLElement, isVisible: boolean): void {
   element.setAttribute('style', 'display:none !important');
 }
 
-export function parseTileString(tiles: string): Record<string, number> {
-  const tileMap: Record<string, number> = {};
-  for (const result of [..."mpsz"].map(g => new RegExp(`[1-9]+${g}`).exec(tiles))) {
-    if(result === null) {
-      continue;
+export function parseTileString(tiles: string): Array<Record<string, number>> {
+  return tiles.split(',').map(tiles => {
+    const tileMap: Record<string, number> = {};
+    for (const result of [..."mpsz"].map(g => new RegExp(`[1-9]+${g}`).exec(tiles))) {
+      if(result === null) {
+        continue;
+      }
+      const group = result[0];
+      for (let i = 0; i < group.length - 1; i++) {
+        const tile = group[i] + group[group.length - 1];
+        tileMap[tile] = (tileMap[tile] ?? 0) + 1;
+      }
     }
-    const group = result[0];
-    for (let i = 0; i < group.length - 1; i++) {
-      const tile = group[i] + group[group.length - 1];
-      tileMap[tile] = (tileMap[tile] ?? 0) + 1;
-    }
-  }
-  return tileMap;
+    return tileMap;
+  }).slice(0, 3);
 }
 
-export function tileMapToString(tileMap: Record<string, number>): string {
-  const groups: Record<string, string> = {};
-// @ts-ignore
-  for (const [key, value] of Object.entries(tileMap).sort((a, b) => a[0].codePointAt(0) - b[0].codePointAt(0))) {
-    groups[key[1]] = (groups[key[1]] ?? "") + key[0].repeat(value);
-  }
-  let desc = "";
-  for (const group of ["m", "p", "s", "z"]) {
-    if (!(group in groups)) {
-      continue;
-    }
-    desc += groups[group] + group;
-  }
-  return desc;
+export function tileMapToString(tileMap: Array<Record<string, number>>): string {
+  const counter: Record<string, number> = {};
+  return tileMap.map(tileMap => {
+    const groups: Record<string, string> = {};
+    // @ts-ignore
+      for (const [key, value] of Object.entries(tileMap).sort((a, b) => a[0].codePointAt(0) - b[0].codePointAt(0))) {
+        const realValue = (counter[key] ?? 0) + value > 4 ? 4 - (counter[key] ?? 0) : value;
+        if (realValue !== 0) {
+          groups[key[1]] = (groups[key[1]] ?? "") + key[0].repeat(realValue);
+          counter[key] = (counter[key] ?? 0) + realValue;  
+        }
+      }
+      let desc = "";
+      for (const group of ["m", "p", "s", "z"]) {
+        if (!(group in groups)) {
+          continue;
+        }
+        desc += groups[group] + group;
+      }
+      if (desc === "") {
+        return "0";
+      }
+      return desc;    
+  }).join(',').replace(/(,0)+$/g, '').replace(/^0$/, '');
 }
 
 export class GameUi {
@@ -332,6 +344,7 @@ export class GameUi {
     this.client.match.on('update', this.updateSetup.bind(this));
     this.elements.gameType.onchange = () => {
       this.updateVisibility();
+      this.resetAka();
       this.resetPoints();
     };
     this.updateSetup();
@@ -384,6 +397,14 @@ export class GameUi {
       }
     }
 
+    for (const option of Array.from(this.elements.aka.querySelectorAll('option'))) {
+      if (GAME_TYPES[gameType].akas.indexOf(option.value) === -1) {
+        option.style.display = 'none';
+      } else {
+        option.style.display = 'block';
+      }
+    }
+
     const dealType = this.elements.dealType.value as DealType;
     if (DEALS[gameType][dealType] === undefined) {
       this.resetDealType();
@@ -406,6 +427,13 @@ export class GameUi {
       }
     }
   }
+
+  private resetAka(): void {
+    const gameType = this.elements.gameType.value as GameType;
+    this.elements.aka.value = GAME_TYPES[gameType].akas[0];
+    this.setupAka();
+  }
+
   private setupAka(): void {
     if (this.elements.aka.value === "-") {
       this.elements.akaText.disabled = false;

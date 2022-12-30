@@ -201,21 +201,35 @@ export class TileThingGroup extends InstancedThingGroup {
   createInstanceMeshGroups(params: ThingParams[]): Record<number, InstancedMesh> {
     const mesh = this.createInstancedMesh(params);
     mesh.renderOrder = 1;
+    const extraMesh = this.createInstancedMesh(params);
+    {
+      const material = this.createMaterial();
+      material.map = this.assetLoader.textures["tiles.extra.auto"];
+      extraMesh.material = material;
+    }
     const washizuMesh = this.createInstancedMesh(params);
-    const material = this.createMaterial();
-    material.map = this.assetLoader.textures["tiles.washizu.auto"];
-    material.transparent = true;
-    material.depthWrite = false;
-    material.side = DoubleSide;
-    washizuMesh.material = material;
+    {
+      const material = this.createMaterial();
+      material.map = this.assetLoader.textures["tiles.washizu.auto"];
+      material.transparent = true;
+      material.depthWrite = false;
+      material.side = DoubleSide;
+      washizuMesh.material = material;
+    }
     return {
       0: mesh,
-      1: washizuMesh
+      1: extraMesh,
+      2: washizuMesh
     };
   }
 
   getGroupIndex(typeIndex: number): number {
-    return (typeIndex & (1 << 10)) >> 10;
+    if ((typeIndex & (1 << 12)) >> 12) {
+      return 2;
+    } else if ((typeIndex & (1 << 10)) >> 10) {
+      return 1;
+    }
+    return 0;
   }
 
   protected name: string = 'tile';
@@ -264,6 +278,10 @@ if (vUv.x <= ${TILE_DU}) {
     }
 
     if (this.getGroupIndex(typeIndex) === 1) {
+      // extra tile (e.g. blue and gold)
+      const material = mesh.material as MeshLambertMaterial;
+      material.map = this.assetLoader.textures['tiles.extra.auto'];
+    } else if (this.getGroupIndex(typeIndex) === 2) {
       const material = mesh.material as MeshLambertMaterial;
       material.map = this.assetLoader.textures['tiles.washizu.auto'];
       material.side = DoubleSide;

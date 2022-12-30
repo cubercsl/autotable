@@ -3,6 +3,8 @@ import tableJpg from 'url:../img/table.jpg';
 // @ts-ignore
 import washizuPng from 'url:../img/tiles.washizu.auto.png';
 // @ts-ignore
+import extraPng from 'url:../img/tiles.extra.auto.png';
+// @ts-ignore
 import glbModels from 'url:../img/models.auto.glb';
 
 import { Texture, Mesh, TextureLoader, Material, LinearEncoding,
@@ -75,6 +77,7 @@ export class AssetLoader {
   loadAll(): Promise<void> {
     const tasks = [
       this.loadTexture(tableJpg, 'table'),
+      this.loadTexture(extraPng, 'tiles.extra.auto'),
       this.loadTexture(washizuPng, 'tiles.washizu.auto'),
       this.loadModels(glbModels),
       (document as any).fonts.load('40px "Segment7Standard"'),

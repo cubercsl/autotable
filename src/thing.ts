@@ -89,6 +89,6 @@ export class Thing {
   }
 
   isTransparent(): boolean {
-    return (this.typeIndex & (1 << 10)) > 0;
+    return (this.typeIndex & (1 << 12)) > 0;
   }
 }

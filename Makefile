@@ -1,7 +1,7 @@
 
 all: files
 
-TEXTURES = img/sticks.auto.png img/tiles.auto.png img/tiles.washizu.auto.png img/center.auto.png img/winds.auto.png
+TEXTURES = img/sticks.auto.png img/tiles.auto.png  img/tiles.extra.auto.png img/tiles.washizu.auto.png img/center.auto.png img/winds.auto.png
 
 ICONS = img/icon-16.auto.png img/icon-32.auto.png img/icon-96.auto.png
 
@@ -20,6 +20,9 @@ files: img/models.auto.glb $(ICONS)
 svgs: $(ICONS) $(TEXTURES)
 
 img/tiles.auto.png: img/tiles.svg
+	inkscape $< --export-filename=$@ --export-width=1024 --export-background=#ffffff --export-background-opacity=1
+
+img/tiles.extra.auto.png: img/tiles.extra.svg
 	inkscape $< --export-filename=$@ --export-width=1024 --export-background=#ffffff --export-background-opacity=1
 
 img/tiles.washizu.auto.png: img/tiles.washizu.svg
