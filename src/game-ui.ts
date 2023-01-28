@@ -18,6 +18,9 @@ export function setVisibility(element: HTMLElement, isVisible: boolean): void {
 }
 
 export function parseTileString(tiles: string): Record<string, number> {
+  if (tiles.trim() === "n/a") {
+    return {};
+  }
   const tileMap: Record<string, number> = {};
   for (const result of [..."mpsz"].map(g => new RegExp(`[1-9]+${g}`).exec(tiles))) {
     if(result === null) {
@@ -44,6 +47,9 @@ export function tileMapToString(tileMap: Record<string, number>): string {
       continue;
     }
     desc += groups[group] + group;
+  }
+  if (desc.length === 0) {
+    return "n/a";
   }
   return desc;
 }
@@ -332,6 +338,7 @@ export class GameUi {
     this.client.match.on('update', this.updateSetup.bind(this));
     this.elements.gameType.onchange = () => {
       this.updateVisibility();
+      this.resetAka();
       this.resetPoints();
     };
     this.updateSetup();
@@ -384,6 +391,14 @@ export class GameUi {
       }
     }
 
+    for (const option of Array.from(this.elements.aka.querySelectorAll('option'))) {
+      if (GAME_TYPES[gameType].akas.indexOf(option.value) === -1) {
+        option.style.display = 'none';
+      } else {
+        option.style.display = 'block';
+      }
+    }
+
     const dealType = this.elements.dealType.value as DealType;
     if (DEALS[gameType][dealType] === undefined) {
       this.resetDealType();
@@ -406,6 +421,13 @@ export class GameUi {
       }
     }
   }
+
+  private resetAka(): void {
+    const gameType = this.elements.gameType.value as GameType;
+    this.elements.aka.value = GAME_TYPES[gameType].akas[0];
+    this.setupAka();
+  }
+
   private setupAka(): void {
     if (this.elements.aka.value === "-") {
       this.elements.akaText.disabled = false;

@@ -107,13 +107,13 @@ export class Setup {
     let tileIndex = Math.floor(i / 4);
 
     if (conditions.gameType === GameType.BAMBOO) {
-      if (!((18 <= tileIndex && tileIndex < 27) || tileIndex === 36)) {
+      if (!((18 <= tileIndex && tileIndex < 27))) {
         return null;
       }
     }
 
     if (conditions.gameType === GameType.THREE_PLAYER) {
-      if ((1 <= tileIndex && tileIndex < 8) || tileIndex === 34) {
+      if ((1 <= tileIndex && tileIndex < 8)) {
         return null;
       }
     }
@@ -129,7 +129,7 @@ export class Setup {
       tileIndex |= 1 << 9;
     }
 
-    if ( conditions.gameType === GameType.WASHIZU && i % 4 !== 0 ) {
+    if ( conditions.gameType === GameType.WASHIZU && i % 4 !== 1 ) {
       tileIndex |= 1 << 10;
     }
 

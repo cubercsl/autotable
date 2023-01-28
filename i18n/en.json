@@ -23,10 +23,15 @@
     "aka": {
         "dora": "Aka dora:",
         "no-aka": "No aka",
+        "5s": "1 Red Five",
+        "5p5s": "2 Red Fives",
         "5m5p5s": "3 Red Fives",
+        "55p5s": "3 Red Fives",
         "5m55p5s": "4 Red Fives",
         "5z": "Red Dot",
+        "5p5s5z": "Red Dot, 2 Red Fives",
         "5m5p5s5z": "Red Dot, 3 Red Fives",
+        "55p5s5z": "Red Dot, 3 Red Fives",
         "5m55p5s5z": "Red Dot, 4 Red Fives",
         "custom": "Custom"
     },
